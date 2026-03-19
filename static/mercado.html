@@ -448,6 +448,7 @@ img{display:block}
   </div>
 </div>
 <script>
+var API='http://localhost:8080';
 var currentUser=null,userType='AGRICULTOR',activeDeal=null,activeTrans=null,chatTimer=null;
 var getToken=function(){return localStorage.getItem('token')||'';};
 var ah=function(extra){var h={'Authorization':'Bearer '+getToken(),'Content-Type':'application/json'};if(extra){for(var k in extra)h[k]=extra[k];}return h;};
@@ -501,8 +502,8 @@ async function loadListings(){
   var grid=document.getElementById('listingsGrid');
   grid.innerHTML='<div class="empty"><div class="spin"></div><p style="margin-top:10px">Buscando...</p></div>';
   try{
-    var url='/mercado/produtos';
-    if(crop)url='/mercado/produtos/buscar?termo='+encodeURIComponent(crop);
+    var url=API+'/mercado/produtos';
+    if(crop)url=API+'/mercado/produtos/buscar?termo='+encodeURIComponent(crop);
     var r=await fetch(url,{headers:ah()});
     if(!r.ok){grid.innerHTML='<div class="empty"><p>Erro ao carregar ('+r.status+'). Verifique sua sessao.</p></div>';return;}
     var lista=await r.json();
@@ -530,7 +531,7 @@ async function loadListings(){
 var _produtoAtual=null;
 async function openProduto(id){
   try{
-    var r=await fetch('/mercado/produtos',{headers:ah()});
+    var r=await fetch(API+'/mercado/produtos',{headers:ah()});
     var lista=await r.json();
     var p=lista.find(function(x){return x.id===id;});
     if(!p)return;
@@ -571,7 +572,7 @@ function shareListing(){
 }
 async function deleteProduto(id){
   if(!confirm('Remover esta publicacao?'))return;
-  var r=await fetch('/mercado/produtos/'+id,{method:'DELETE',headers:ah()});
+  var r=await fetch(API+'/mercado/produtos/'+id,{method:'DELETE',headers:ah()});
   if(r.ok){closeModal('modalListing');loadListings();loadMyListings();showToast('Removida.','success');}
   else showToast('Erro ao remover.','error');
 }
@@ -579,7 +580,7 @@ async function loadMyListings(){
   var grid=document.getElementById('myListingsGrid');
   grid.innerHTML='<div class="empty"><div class="spin"></div></div>';
   try{
-    var r=await fetch('/mercado/meus-produtos',{headers:ah()});
+    var r=await fetch(API+'/mercado/meus-produtos',{headers:ah()});
     if(!r.ok){grid.innerHTML='<div class="empty"><p>Erro ao carregar.</p></div>';return;}
     var lista=await r.json();
     if(!lista||!lista.length){grid.innerHTML='<div class="empty"><p>Nenhuma publicacao ainda.</p></div>';return;}
@@ -613,7 +614,7 @@ async function submitListing(e){
       organico:false,
       disponivel:true
     };
-    var r=await fetch('/mercado/produtos',{method:'POST',headers:ah(),body:JSON.stringify(data)});
+    var r=await fetch(API+'/mercado/produtos',{method:'POST',headers:ah(),body:JSON.stringify(data)});
     if(r.ok){setAlert('listingAlert','Publicado com sucesso!','success');form.reset();setTimeout(function(){closeModal('modalNewListing');loadListings();loadMyListings();},1200);}
     else{var err=await r.text();setAlert('listingAlert','Erro ao publicar: '+err,'error');}
   }catch(ex){setAlert('listingAlert','Erro de conexao.','error');}
