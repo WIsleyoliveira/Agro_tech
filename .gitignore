@@ -1,0 +1,58 @@
+# Java / Maven
+backend/target/
+*.class
+*.jar
+*.war
+
+# H2 Database
+backend/data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Ambiente virtual
+venv/
+env/
+.venv/
+.env
+
+# Banco de dados
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Backups
+*.bak
+main_backup.py
+
+# Sistema macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# IDE
+.idea/
+*.iml
+
+# Uploads (imagens enviadas pelos usuários)
+static/uploads/
+
+# Chaves e segredos
+*.key
+*.pem
+secrets.py

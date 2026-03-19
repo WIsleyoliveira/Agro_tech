@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: agrotech-platform
+  
+  # Database Configuration
+  datasource:
+    url: jdbc:h2:file:./data/agrotech
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  # Server Configuration
+  server:
+    port: 8080
+    servlet:
+      context-path: /api
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:agrotech-secret-key-change-in-production-2026}
+  expiration: 86400000 # 24 horas
+
+# AI Services Configuration
+ai:
+  gemini:
+    api-key: ${GEMINI_API_KEY:}
+    enabled: false
+  ollama:
+    base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+    enabled: true
+
+# CORS Configuration
+cors:
+  allowed-origins: http://localhost:*,http://127.0.0.1:*
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# Logging
+logging:
+  level:
+    com.agrotech: DEBUG
+    org.springframework.security: DEBUG

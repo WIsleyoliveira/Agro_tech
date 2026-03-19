@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroTech Platform | Análise de Solo com IA</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root[data-theme="light"] {
+            --primary: #059669;
+            --primary-hover: #047857;
+            --primary-muted: rgba(5, 150, 105, 0.08);
+            --accent: #10B981;
+            --bg: #F0FDF4;
+            --surface: #FFFFFF;
+            --border: #D1FAE5;
+            --text: #064E3B;
+            --text-secondary: #047857;
+            --text-muted: #6B7280;
+            --radius: 10px;
+            --radius-lg: 14px;
+            --shadow: 0 1px 3px rgba(5, 150, 105, 0.1);
+            --shadow-lg: 0 4px 24px rgba(5, 150, 105, 0.15);
+        }
+        
+        :root[data-theme="dark"] {
+            --primary: #10B981;
+            --primary-hover: #059669;
+            --primary-muted: rgba(16, 185, 129, 0.15);
+            --accent: #34D399;
+            --bg: #0F172A;
+            --surface: #1E293B;
+            --border: #334155;
+            --text: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            --radius: 10px;
+            --radius-lg: 14px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-lg: 0 4px 24px rgba(0,0,0,0.5);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Adicionar gradiente verde no modo claro */
+        body[data-theme="light"], 
+        :root[data-theme="light"] body {
+            background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 50%, #D1FAE5 100%);
+        }
+        
+        .app {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .theme-toggle-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--primary);
+            background: var(--primary-muted);
+        }
+        
+        .btn-logout {
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-logout:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo-text span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 6px 12px;
+            background: var(--primary-muted);
+            color: var(--primary);
+            border-radius: 100px;
+        }
+        
+        /* Layout */
+        .main {
+            display: block;
+        }
+
+        /* Page Tabs */
+        .page-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 6px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .page-tab {
+            flex: 1;
+            padding: 12px 20px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .page-tab:hover {
+            background: var(--primary-muted);
+            color: var(--primary);
+        }
+
+        .page-tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+        }
+
+        .page-tab .tab-badge {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 7px;
+            border-radius: 100px;
+            font-weight: 600;
+        }
+
+        .page-tab:not(.active) .tab-badge {
+            background: var(--primary-muted);
+            color: var(--primary);
+        }
+
+        .page-panel {
+            display: none;
+        }
+
+        .page-panel.active {
+            display: block;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 24px 24px 0;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        
+        /* Form */
+        .form-section {
+            padding: 0 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        
+        .form-input, .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-muted);
+        }
+        
+        .form-input::placeholder { color: var(--text-muted); }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        @media (max-width: 500px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+        
+        .form-nutrients {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 16px;
+        }
+        
+        .form-divider {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid var(--border);
+        }
+        
+        .form-divider + .form-label {
+            margin-top: 4px;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: #F3F4F6;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            padding: 24px;
+        }
+        
+        .btn-group .btn-primary { flex: 1; }
+        
+        /* Result */
+        .result {
+            margin: 0 24px 24px;
+            padding: 20px;
+            background: var(--bg);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        
+        .result-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .result-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        
+        .result-badge.high {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        
+        .result-badge.medium {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .result-badge.low {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        .result-content {
+            font-size: 0.9rem;
+            line-height: 1.65;
+            white-space: pre-line;
+            color: var(--text);
+            max-height: 360px;
+            overflow-y: auto;
+        }
+        
+        .result-footer {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .result-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .result-tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            background: var(--primary-muted);
+            color: var(--primary);
+            border-radius: 100px;
+        }
+        
+        /* Chat */
+        .chat {
+            display: flex;
+            flex-direction: column;
+            height: 420px;
+        }
+        
+        .chat-bar {
+            padding: 14px 20px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-status {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .chat-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+        
+        .chat-status-dot.online {
+            background: var(--accent);
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .msg {
+            max-width: 85%;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-radius: 12px;
+        }
+        
+        .msg-user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+        }
+        
+        .msg-assistant {
+            align-self: flex-start;
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .msg-system {
+            align-self: center;
+            background: var(--primary-muted);
+            color: var(--primary);
+            font-size: 0.85rem;
+        }
+        
+        .chat-empty {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+        
+        .chat-empty-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        
+        .chat-empty p {
+            font-size: 0.9rem;
+            max-width: 240px;
+        }
+        
+        .chat-input-wrap {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 10px 16px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text);
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .chat-input:disabled {
+            background: var(--bg);
+            cursor: not-allowed;
+        }
+        
+        .chat-send {
+            padding: 10px 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        
+        .chat-send:hover:not(:disabled) { background: var(--primary-hover); }
+        .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .chat-actions {
+            padding: 0 24px 24px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        /* Loading */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px;
+            gap: 16px;
+        }
+        
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .loading-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Utils */
+        .hidden { display: none !important; }
+        
+        .example-btn {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .example-btn:hover { color: var(--primary); }
+        
+        .form-hint-inline {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .form-hint-inline .kg-ha { color: var(--primary); font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-mark"></div>
+                <div class="logo-text">
+                    <h1>AgroTech Platform</h1>
+                    <span>Análise de solo com IA</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="/mercado" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:.85rem;font-weight:600;background:var(--primary-muted,rgba(5,150,105,.1));color:var(--primary,#059669);text-decoration:none;transition:.2s" onmouseover="this.style.background='var(--primary,#059669)';this.style.color='#fff'" onmouseout="this.style.background='var(--primary-muted,rgba(5,150,105,.1))';this.style.color='var(--primary,#059669)'">
+                    <i class="fas fa-store"></i> Mercado
+                </a>
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Alternar tema">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="/" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </div>
+        </header>
+        
+        <main class="main">
+
+            <!-- Abas de navegação -->
+            <div class="page-tabs">
+                <button class="page-tab active" id="tabAnalise">
+                    <i class="fas fa-flask"></i> Análise de Solo
+                </button>
+                <button class="page-tab" id="tabAssistente">
+                    <i class="fas fa-comments"></i> Agro.IA
+                    <span class="tab-badge" id="chatBadge" style="display:none">0</span>
+                </button>
+            </div>
+
+            <!-- Painel: Análise de Solo -->
+            <div class="page-panel active" id="panelAnalise">
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Análise de Solo</h2>
+                    <p class="card-subtitle">Informe os dados do sensor para obter recomendações</p>
+                </div>
+                
+                <form id="analysisForm" class="form-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="ph">pH</label>
+                            <input type="number" id="ph" class="form-input" step="0.1" min="0" max="14" value="6.2" required placeholder="0–14">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="humidity">Umidade (%)</label>
+                            <input type="number" id="humidity" class="form-input" step="0.1" min="0" max="100" value="45" required placeholder="%">
+                        </div>
+                    </div>
+                    
+                    <hr class="form-divider">
+                    <div class="form-group">
+                        <label class="form-label" for="soilType">Tipo de solo (densidade para conversão)</label>
+                        <select id="soilType" class="form-select" title="Define a densidade usada na conversão mg/kg → kg/ha">
+                            <option value="franco" selected>Franco — Terra mista, equilibrada (1250 kg/m³)</option>
+                            <option value="organico_siltoso">Orgânico/Siltoso — Várzea, baixada (1100 kg/m³)</option>
+                            <option value="argiloso">Argiloso — Terra vermelha, forte (1150 kg/m³)</option>
+                            <option value="franco_argiloso">Franco-argiloso — Terra preta, cultura (1200 kg/m³)</option>
+                            <option value="franco_arenoso">Franco-arenoso — Terra leve, solta (1350 kg/m³)</option>
+                            <option value="arenoso">Arenoso — Terra de areia (1450 kg/m³)</option>
+                        </select>
+                    </div>
+                    <label class="form-label">Nutrientes do sensor (mg/kg, máx. 2000)</label>
+                    <p class="form-hint-inline" style="margin-bottom:12px">Conversão: 1 mg/kg ≈ <span id="convFactorDisplay">2,5</span> kg/ha</p>
+                    <div class="form-nutrients">
+                        <div class="form-group">
+                            <label class="form-label" for="nitrogen">Nitrogênio (N)</label>
+                            <input type="number" id="nitrogen" class="form-input" step="1" min="0" max="2000" placeholder="0–2000">
+                            <span class="form-hint-inline" id="nitrogenKgHa"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="phosphorus">Fósforo (P)</label>
+                            <input type="number" id="phosphorus" class="form-input" step="1" min="0" max="2000" placeholder="0–2000">
+                            <span class="form-hint-inline" id="phosphorusKgHa"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="potassium">Potássio (K)</label>
+                            <input type="number" id="potassium" class="form-input" step="1" min="0" max="2000" placeholder="0–2000">
+                            <span class="form-hint-inline" id="potassiumKgHa"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="calcium">Ca (cmolc/dm³)</label>
+                            <input type="number" id="calcium" class="form-input" step="0.1" placeholder="2–6">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="magnesium">Mg (cmolc/dm³)</label>
+                            <input type="number" id="magnesium" class="form-input" step="0.1" placeholder="0.8–2">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="organic_matter">MO (g/dm³)</label>
+                            <input type="number" id="organic_matter" class="form-input" step="0.1" placeholder="20–40">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="crop">Cultura</label>
+                            <select id="crop" class="form-select">
+                                <option value="">Geral</option>
+                                <option value="soja">Soja</option>
+                                <option value="milho">Milho</option>
+                                <option value="cafe">Café</option>
+                                <option value="cana">Cana-de-açúcar</option>
+                                <option value="algodao">Algodão</option>
+                                <option value="trigo">Trigo</option>
+                                <option value="arroz">Arroz</option>
+                                <option value="feijao">Feijão</option>
+                                <option value="hortalicas">Hortaliças</option>
+                                <option value="frutiferas">Frutíferas</option>
+                                <option value="pastagem">Pastagem</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="region">Região / Estado</label>
+                            <select id="region" class="form-select">
+                                <option value="">Não informada</option>
+                                <optgroup label="Centro-Oeste">
+                                    <option value="MT">Mato Grosso (MT)</option>
+                                    <option value="MS">Mato Grosso do Sul (MS)</option>
+                                    <option value="GO">Goiás (GO)</option>
+                                    <option value="DF">Distrito Federal (DF)</option>
+                                </optgroup>
+                                <optgroup label="Sul">
+                                    <option value="RS">Rio Grande do Sul (RS)</option>
+                                    <option value="SC">Santa Catarina (SC)</option>
+                                    <option value="PR">Paraná (PR)</option>
+                                </optgroup>
+                                <optgroup label="Sudeste">
+                                    <option value="SP">São Paulo (SP)</option>
+                                    <option value="MG">Minas Gerais (MG)</option>
+                                    <option value="RJ">Rio de Janeiro (RJ)</option>
+                                    <option value="ES">Espírito Santo (ES)</option>
+                                </optgroup>
+                                <optgroup label="Nordeste">
+                                    <option value="BA">Bahia (BA)</option>
+                                    <option value="PI">Piauí (PI)</option>
+                                    <option value="MA">Maranhão (MA)</option>
+                                    <option value="CE">Ceará (CE)</option>
+                                    <option value="PE">Pernambuco (PE)</option>
+                                    <option value="RN">Rio Grande do Norte (RN)</option>
+                                    <option value="PB">Paraíba (PB)</option>
+                                    <option value="SE">Sergipe (SE)</option>
+                                    <option value="AL">Alagoas (AL)</option>
+                                </optgroup>
+                                <optgroup label="Norte">
+                                    <option value="PA">Pará (PA)</option>
+                                    <option value="AM">Amazonas (AM)</option>
+                                    <option value="RO">Rondônia (RO)</option>
+                                    <option value="TO">Tocantins (TO)</option>
+                                    <option value="AP">Amapá (AP)</option>
+                                    <option value="RR">Roraima (RR)</option>
+                                    <option value="AC">Acre (AC)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary" id="analyzeBtn">
+                            <i class="fas fa-chart-line"></i> Analisar
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="quickAnalyzeBtn">Rápida</button>
+                    </div>
+                    
+                    <button type="button" class="btn btn-secondary example-btn" id="exampleBtn" style="width:100%;">
+                        <i class="fas fa-flask"></i> Preencher exemplo
+                    </button>
+                </form>
+                
+                <div class="loading hidden" id="analysisLoading">
+                    <div class="spinner"></div>
+                    <span class="loading-text">Analisando dados...</span>
+                </div>
+                
+                <div class="result hidden" id="analysisResult">
+                    <div class="result-header">
+                        <span class="result-title">Recomendação</span>
+                        <span class="result-badge" id="resultConfidence">—</span>
+                    </div>
+                    <div class="result-content" id="resultContent"></div>
+                    <div class="result-tags" id="parameterSummary"></div>
+                    <div class="result-footer" id="resultFooter"></div>
+                </div>
+
+                <!-- Botão para ir ao Assistente após análise -->
+                <div id="goToAssistantWrap" class="hidden" style="padding: 0 24px 24px;">
+                    <button class="btn btn-primary" id="goToAssistantBtn" style="width:100%">
+                        <i class="fas fa-comments"></i> Conversar com Agro.IA
+                    </button>
+                </div>
+
+            </section>
+            </div><!-- /panelAnalise -->
+
+            <!-- Painel: Agro.IA -->
+            <div class="page-panel" id="panelAssistente">
+            <section class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Agro.IA</h2>
+                    <p class="card-subtitle">Tire dúvidas com base na análise do seu solo</p>
+                </div>
+                
+                <div class="chat-wrap" style="position:relative">
+                <div class="chat">
+                    <div class="chat-bar">
+                        <span class="chat-status">
+                            <span class="chat-status-dot" id="statusDot"></span>
+                            <span id="sessionStatus">Aguardando análise</span>
+                        </span>
+                        <span id="messageCount" style="font-size:0.8rem;color:var(--text-muted)">0 msgs</span>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-empty" id="chatEmpty">
+                            <i class="fas fa-comments chat-empty-icon"></i>
+                            <p>Analise o solo primeiro e inicie uma sessão para conversar com o especialista virtual.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-wrap">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Pergunte sobre correções, adubação..." disabled>
+                        <button class="chat-send" id="sendBtn" disabled><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                    
+                    <div class="chat-actions">
+                        <button class="btn btn-primary btn-sm" id="startChatBtn" style="flex:1;">
+                            <i class="fas fa-play"></i> Iniciar sessão
+                        </button>
+                        <button class="btn btn-secondary btn-sm hidden" id="endChatBtn">
+                            <i class="fas fa-stop"></i> Encerrar
+                        </button>
+                    </div>
+                </div>
+                <div class="loading hidden" id="chatLoading" style="position:absolute;inset:0;background:rgba(255,255,255,0.95);z-index:5">
+                    <div class="spinner"></div>
+                    <span class="loading-text">Consultando...</span>
+                </div>
+                </div>
+            </section>
+            </div><!-- /panelAssistente -->
+
+        </main>
+    </div>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+        const elements = {
+            analysisForm: $('analysisForm'),
+            analyzeBtn: $('analyzeBtn'),
+            quickAnalyzeBtn: $('quickAnalyzeBtn'),
+            exampleBtn: $('exampleBtn'),
+            analysisLoading: $('analysisLoading'),
+            analysisResult: $('analysisResult'),
+            resultContent: $('resultContent'),
+            resultConfidence: $('resultConfidence'),
+            parameterSummary: $('parameterSummary'),
+            resultFooter: $('resultFooter'),
+            ph: $('ph'), humidity: $('humidity'),
+            nitrogen: $('nitrogen'), phosphorus: $('phosphorus'), potassium: $('potassium'),
+            calcium: $('calcium'), magnesium: $('magnesium'), organic_matter: $('organic_matter'),
+            crop: $('crop'), soilType: $('soilType'), region: $('region'),
+            chatMessages: $('chatMessages'),
+            chatEmpty: $('chatEmpty'),
+            chatInput: $('chatInput'),
+            sendBtn: $('sendBtn'),
+            startChatBtn: $('startChatBtn'),
+            endChatBtn: $('endChatBtn'),
+            chatLoading: $('chatLoading'),
+            sessionStatus: $('sessionStatus'),
+            statusDot: $('statusDot'),
+            messageCount: $('messageCount')
+        };
+
+        let currentSessionId = null;
+        let messageCounter = 0;
+        let lastAnalysisData = null;
+
+        const CROPS = { soja:'Soja', milho:'Milho', cafe:'Café', cana:'Cana', algodao:'Algodão', trigo:'Trigo', arroz:'Arroz', feijao:'Feijão', hortalicas:'Hortaliças', frutiferas:'Frutíferas', pastagem:'Pastagem' };
+        const SOIL_DENSITIES = { organico_siltoso:1100, argiloso:1150, franco_argiloso:1200, franco:1250, franco_arenoso:1350, arenoso:1450 };
+        const getConvFactor = () => (10000 * 0.2 * (SOIL_DENSITIES[elements.soilType?.value] || 1250)) / 1e6;
+
+        // ===== NAVEGAÇÃO POR ABAS =====
+        function switchTab(tabName) {
+            document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.page-panel').forEach(p => p.classList.remove('active'));
+            $('tab' + tabName).classList.add('active');
+            $('panel' + tabName).classList.add('active');
+        }
+        $('tabAnalise').addEventListener('click', () => switchTab('Analise'));
+        $('tabAssistente').addEventListener('click', () => switchTab('Assistente'));
+
+        // Botão "Conversar com Assistente" após análise
+        $('goToAssistantBtn').addEventListener('click', () => {
+            switchTab('Assistente');
+            // Iniciar sessão automaticamente se ainda não iniciou
+            if (!currentSessionId && lastAnalysisData) {
+                elements.startChatBtn.click();
+            }
+        });
+
+        // Análise
+        elements.analysisForm.addEventListener('submit', (e) => { e.preventDefault(); performAnalysis('complete'); });
+        elements.quickAnalyzeBtn.addEventListener('click', () => performAnalysis('quick'));
+        function mgKgToKgHa(v) { const f = getConvFactor(); return v !== '' && !isNaN(v) ? (parseFloat(v) * f).toFixed(1) : null; }
+        function updateKgHaDisplay() {
+            const f = getConvFactor();
+            const disp = $('convFactorDisplay');
+            if (disp) disp.textContent = f.toFixed(1).replace('.', ',');
+            ['nitrogen','phosphorus','potassium'].forEach(id => {
+                const el = elements[id];
+                const span = document.getElementById(id + 'KgHa');
+                const v = mgKgToKgHa(el?.value);
+                span.textContent = v ? `→ ${v} kg/ha` : '';
+            });
+        }
+        ['nitrogen','phosphorus','potassium'].forEach(id => {
+            elements[id]?.addEventListener('input', updateKgHaDisplay);
+        });
+        elements.soilType?.addEventListener('change', updateKgHaDisplay);
+
+        elements.exampleBtn.addEventListener('click', () => {
+            elements.nitrogen.value = '80'; elements.phosphorus.value = '40'; elements.potassium.value = '200';
+            elements.calcium.value = '3.2'; elements.magnesium.value = '1.1'; elements.organic_matter.value = '28.5';
+            elements.crop.value = 'soja';
+            updateKgHaDisplay();
+        });
+
+        async function performAnalysis(type) {
+            elements.analyzeBtn.disabled = true;
+            elements.analysisLoading.classList.remove('hidden');
+            elements.analysisResult.classList.add('hidden');
+            
+            const soilData = {
+                ph: parseFloat(elements.ph.value),
+                humidity: parseFloat(elements.humidity.value),
+                nitrogen: elements.nitrogen.value ? parseFloat(elements.nitrogen.value) : null,
+                phosphorus: elements.phosphorus.value ? parseFloat(elements.phosphorus.value) : null,
+                potassium: elements.potassium.value ? parseFloat(elements.potassium.value) : null,
+                calcium: elements.calcium.value ? parseFloat(elements.calcium.value) : null,
+                magnesium: elements.magnesium.value ? parseFloat(elements.magnesium.value) : null,
+                organic_matter: elements.organic_matter.value ? parseFloat(elements.organic_matter.value) : null,
+                crop: elements.crop.value || null,
+                soil_type: elements.soilType?.value || 'franco',
+                region: elements.region?.value || null
+            };
+            lastAnalysisData = soilData;
+
+            try {
+                const res = await fetch(type === 'complete' ? '/api/analyze' : '/api/analyze/quick', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(soilData)
+                });
+                const data = await res.json();
+
+                elements.resultContent.textContent = data.success ? data.recommendation : (data.fallback || data.error);
+                
+                const n = data.parameters_provided || 0;
+                elements.resultConfidence.textContent = n >= 6 ? 'Alta' : n >= 3 ? 'Média' : 'Preliminar';
+                elements.resultConfidence.className = 'result-badge ' + (n >= 6 ? 'high' : n >= 3 ? 'medium' : 'low');
+                
+                elements.parameterSummary.innerHTML = '';
+                const units = { ph:'', humidity:'%', nitrogen:' kg/ha', phosphorus:' kg/ha', potassium:' kg/ha', calcium:' cmolc/dm³', magnesium:' cmolc/dm³', organic_matter:' g/dm³' };
+                const labels = { organic_matter:'MO', nitrogen:'N', phosphorus:'P', potassium:'K' };
+                ['ph','humidity','nitrogen','phosphorus','potassium','calcium','magnesium','organic_matter'].forEach(k => {
+                    if (soilData[k] != null) {
+                        const tag = document.createElement('span');
+                        tag.className = 'result-tag';
+                        let val = soilData[k];
+                        if (k === 'nitrogen' || k === 'phosphorus' || k === 'potassium') {
+                            val = (soilData[k] * getConvFactor()).toFixed(1);
+                            tag.textContent = `${labels[k]}: ${val} kg/ha (${soilData[k]} mg/kg)`;
+                        } else {
+                            tag.textContent = `${labels[k] || k.toUpperCase()}: ${val}${units[k]}`;
+                        }
+                        elements.parameterSummary.appendChild(tag);
+                    }
+                });
+                if (soilData.crop) {
+                    const t = document.createElement('span');
+                    t.className = 'result-tag';
+                    t.textContent = 'Cultura: ' + (CROPS[soilData.crop] || soilData.crop);
+                    elements.parameterSummary.appendChild(t);
+                }
+                if (soilData.region) {
+                    const t = document.createElement('span');
+                    t.className = 'result-tag';
+                    t.textContent = 'Região: ' + soilData.region;
+                    elements.parameterSummary.appendChild(t);
+                }
+
+                elements.resultFooter.textContent = new Date(data.timestamp || Date.now()).toLocaleString('pt-BR') + (data.parameters_provided ? ` · ${data.parameters_provided}/8 parâmetros` : '');
+                elements.analysisResult.classList.remove('hidden');
+
+                // Mostrar botão para ir ao assistente e destacar aba
+                $('goToAssistantWrap').classList.remove('hidden');
+                $('tabAssistente').style.animation = 'pulse 0.5s ease';
+                setTimeout(() => $('tabAssistente').style.animation = '', 600);
+
+            } catch (err) {
+                elements.resultContent.textContent = 'Erro de conexão. Verifique se o servidor está rodando.';
+                elements.analysisResult.classList.remove('hidden');
+            } finally {
+                elements.analyzeBtn.disabled = false;
+                elements.analysisLoading.classList.add('hidden');
+            }
+        }
+
+        // Chat
+        elements.startChatBtn.addEventListener('click', async () => {
+            if (!lastAnalysisData) {
+                alert('Analise o solo antes de iniciar o chat.');
+                return;
+            }
+            elements.chatLoading.classList.remove('hidden');
+            try {
+                const res = await fetch('/api/conversation/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ph: lastAnalysisData.ph,
+                        humidity: lastAnalysisData.humidity,
+                        nitrogen: lastAnalysisData.nitrogen,
+                        phosphorus: lastAnalysisData.phosphorus,
+                        potassium: lastAnalysisData.potassium,
+                        calcium: lastAnalysisData.calcium,
+                        magnesium: lastAnalysisData.magnesium,
+                        organic_matter: lastAnalysisData.organic_matter,
+                        crop: lastAnalysisData.crop,
+                        soil_type: lastAnalysisData.soil_type,
+                        region: lastAnalysisData.region
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    currentSessionId = data.session_id;
+                    messageCounter = 0;
+                    elements.chatEmpty.classList.add('hidden');
+                    elements.chatInput.disabled = false;
+                    elements.sendBtn.disabled = false;
+                    elements.startChatBtn.classList.add('hidden');
+                    elements.endChatBtn.classList.remove('hidden');
+                    elements.sessionStatus.textContent = 'Online';
+                    elements.statusDot.classList.add('online');
+                    elements.chatMessages.innerHTML = '';
+
+                    const d = lastAnalysisData;
+                    const f = getConvFactor();
+                    let lines = ['Dados do solo carregados:'];
+                    lines.push(`  pH: ${d.ph}`);
+                    lines.push(`  Umidade: ${d.humidity}%`);
+                    if (d.nitrogen != null) lines.push(`  Nitrogênio (N): ${d.nitrogen} mg/kg → ${(d.nitrogen * f).toFixed(1)} kg/ha`);
+                    if (d.phosphorus != null) lines.push(`  Fósforo (P): ${d.phosphorus} mg/kg → ${(d.phosphorus * f).toFixed(1)} kg/ha`);
+                    if (d.potassium != null) lines.push(`  Potássio (K): ${d.potassium} mg/kg → ${(d.potassium * f).toFixed(1)} kg/ha`);
+                    if (d.calcium != null) lines.push(`  Cálcio (Ca): ${d.calcium} cmolc/dm³`);
+                    if (d.magnesium != null) lines.push(`  Magnésio (Mg): ${d.magnesium} cmolc/dm³`);
+                    if (d.organic_matter != null) lines.push(`  Matéria Orgânica: ${d.organic_matter} g/dm³`);
+                    if (d.crop) lines.push(`  Cultura: ${CROPS[d.crop] || d.crop}`);
+                    if (d.region) lines.push(`  Região: ${d.region}`);
+                    if (d.soil_type) {
+                        const st = elements.soilType;
+                        const opt = st?.options[st.selectedIndex];
+                        lines.push(`  Tipo de solo: ${opt ? opt.text : d.soil_type}`);
+                    }
+                    lines.push('');
+                    lines.push('Como posso ajudar com o manejo do seu solo?');
+                    addMsg('assistant', lines.join('\n'));
+                    updateChatBadge();
+                } else alert(data.error || 'Erro ao iniciar sessão.');
+            } catch (e) { alert('Erro de conexão.'); }
+            elements.chatLoading.classList.add('hidden');
+        });
+
+        elements.endChatBtn.addEventListener('click', async () => {
+            if (!currentSessionId) return;
+            try {
+                await fetch(`/api/conversation/end/${currentSessionId}`, { method: 'DELETE' });
+            } catch (_) {}
+            currentSessionId = null;
+            elements.startChatBtn.classList.remove('hidden');
+            elements.endChatBtn.classList.add('hidden');
+            elements.chatInput.disabled = true;
+            elements.sendBtn.disabled = true;
+            elements.sessionStatus.textContent = 'Aguardando análise';
+            elements.statusDot.classList.remove('online');
+            elements.chatMessages.innerHTML = '';
+            elements.chatEmpty.classList.remove('hidden');
+        });
+
+        elements.sendBtn.addEventListener('click', sendMsg);
+        elements.chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMsg(); });
+
+        async function sendMsg() {
+            const txt = elements.chatInput.value.trim();
+            if (!txt || !currentSessionId) return;
+            addMsg('user', txt);
+            elements.chatInput.value = '';
+            messageCounter++;
+            elements.messageCount.textContent = messageCounter + ' msgs';
+            elements.sendBtn.disabled = true;
+            elements.chatLoading.classList.remove('hidden');
+            try {
+                const res = await fetch('/api/conversation/message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: currentSessionId,
+                        message: txt,
+                        soil_context: lastAnalysisData
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    addMsg('assistant', data.message || data.response);
+                    messageCounter++;
+                    elements.messageCount.textContent = messageCounter + ' msgs';
+                    updateChatBadge();
+                } else addMsg('system', data.error || 'Erro ao obter resposta.');
+            } catch (e) { addMsg('system', 'Erro de conexão.'); }
+            elements.chatLoading.classList.add('hidden');
+            elements.sendBtn.disabled = false;
+            elements.chatInput.focus();
+        }
+
+        function addMsg(type, content) {
+            const div = document.createElement('div');
+            div.className = 'msg msg-' + type;
+            div.textContent = content;
+            elements.chatMessages.appendChild(div);
+            elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+        }
+
+        function updateChatBadge() {
+            const badge = $('chatBadge');
+            const count = elements.chatMessages.querySelectorAll('.msg').length;
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateKgHaDisplay);
+
+        // Animação de destaque na aba do assistente após análise
+        const style = document.createElement('style');
+        style.textContent = `@keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.04); box-shadow: 0 0 0 4px rgba(5,150,105,0.25); } }`;
+        document.head.appendChild(style);
+    </script>
+    <script src="theme.js"></script>
+</body>
+</html>

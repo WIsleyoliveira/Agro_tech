@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroTech Platform — Mercado Local</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root[data-theme="light"]{
+  --primary:#059669;--primary-hover:#047857;--primary-light:rgba(5,150,105,.1);
+  --accent:#10B981;
+  --bg:#F0FDF4;--surface:#ffffff;--surface2:#F8FAFC;
+  --border:#D1FAE5;--border2:#e2e8f0;
+  --text:#064E3B;--text-2:#047857;--text-muted:#6B7280;
+  --danger:#DC2626;--danger-bg:#FEE2E2;--danger-border:#FCA5A5;
+  --warn-bg:#FFFBEB;--warn-text:#92400E;--warn-border:#FCD34D;
+  --info-bg:#EFF6FF;--info-text:#1D4ED8;--info-border:#93C5FD;
+  --success-bg:#D1FAE5;--success-text:#065F46;--success-border:#6EE7B7;
+  --radius:10px;--radius-lg:16px;--radius-xl:20px;
+  --shadow:0 1px 4px rgba(5,150,105,.08);--shadow-lg:0 8px 32px rgba(5,150,105,.15);
+  --nav-bg:#ffffff;
+}
+:root[data-theme="dark"]{
+  --primary:#10B981;--primary-hover:#059669;--primary-light:rgba(16,185,129,.15);
+  --accent:#34D399;
+  --bg:#0F172A;--surface:#1E293B;--surface2:#162032;
+  --border:#334155;--border2:#2d3f55;
+  --text:#F1F5F9;--text-2:#CBD5E1;--text-muted:#94A3B8;
+  --danger:#EF4444;--danger-bg:#450a0a;--danger-border:#7f1d1d;
+  --warn-bg:#1c1507;--warn-text:#FCD34D;--warn-border:#78350f;
+  --info-bg:#0c1a2e;--info-text:#93C5FD;--info-border:#1e40af;
+  --success-bg:#052e16;--success-text:#6EE7B7;--success-border:#065f46;
+  --radius:10px;--radius-lg:16px;--radius-xl:20px;
+  --shadow:0 1px 4px rgba(0,0,0,.35);--shadow-lg:0 8px 32px rgba(0,0,0,.55);
+  --nav-bg:#1E293B;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:inherit}
+img{display:block}
+.wrapper{max-width:1100px;margin:0 auto;padding:0 16px 48px}
+.topnav{position:sticky;top:0;z-index:50;background:var(--nav-bg);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;backdrop-filter:blur(8px);box-shadow:var(--shadow)}
+.nav-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.05rem;color:var(--primary)}
+.nav-brand i{font-size:1.2rem}
+.nav-center{display:flex;gap:4px}
+.nav-link{padding:7px 13px;border-radius:var(--radius);font-size:.85rem;font-weight:500;color:var(--text-muted);border:none;background:none;cursor:pointer;transition:.2s}
+.nav-link:hover{background:var(--primary-light);color:var(--primary)}
+.nav-link.active{background:var(--primary-light);color:var(--primary);font-weight:600}
+.nav-right{display:flex;align-items:center;gap:8px}
+.icon-btn{width:36px;height:36px;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;background:var(--primary-light);color:var(--primary);position:relative;transition:.2s}
+.icon-btn:hover{background:var(--primary);color:#fff}
+.icon-btn.logout{background:var(--danger-bg);color:var(--danger)}
+.icon-btn.logout:hover{background:var(--danger);color:#fff}
+.n-badge{position:absolute;top:-3px;right:-3px;background:#EF4444;color:#fff;border-radius:999px;font-size:.62rem;font-weight:700;padding:1px 5px;min-width:16px;text-align:center;line-height:1.4}
+.page-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:28px 0 20px}
+.page-title{font-size:1.4rem;font-weight:700;color:var(--text)}
+.page-title span{color:var(--primary)}
+.my-profile{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.profile-avatar{width:48px;height:48px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;flex-shrink:0}
+.profile-info h2{font-size:.95rem;font-weight:700;margin-bottom:1px}
+.profile-info p{font-size:.8rem;color:var(--text-muted)}
+.type-pill{background:var(--primary-light);color:var(--primary);padding:2px 12px;border-radius:999px;font-size:.72rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;margin-top:4px}
+.stats-bar{display:none;flex-wrap:wrap;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:20px}
+.stat-card{flex:1;min-width:110px;text-align:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 10px}
+.stat-val{font-size:1.15rem;font-weight:700;color:var(--primary)}
+.stat-lbl{font-size:.72rem;color:var(--text-muted);margin-top:3px}
+.price-badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700;margin-bottom:4px}
+.badge-green{background:#d1fae5;color:#065f46}
+.badge-warn{background:#fef3c7;color:#92400e}
+.tabs-row{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:24px;overflow-x:auto}
+.tab-btn{padding:10px 16px;border:none;background:none;cursor:pointer;color:var(--text-muted);font-size:.87rem;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--primary)}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.tab-badge{background:var(--primary);color:#fff;border-radius:999px;font-size:.65rem;font-weight:700;padding:1px 6px}
+.panel{display:none}.panel.active{display:block}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
+.filter-bar .fi{padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text);font-size:.87rem;transition:.2s}
+.filter-bar .fi:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.fi-grow{flex:1;min-width:140px}
+.fi-sm{width:95px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.lcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);transition:.2s;cursor:pointer}
+.lcard:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--primary)}
+.lcard-img{width:100%;height:155px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:2.6rem;color:var(--border)}
+.lcard-img img{width:100%;height:100%;object-fit:cover}
+.lcard-body{padding:13px}
+.lcard-title{font-weight:600;font-size:.93rem;margin-bottom:3px}
+.lcard-sub{font-size:.76rem;color:var(--text-muted);margin-bottom:8px}
+.lcard-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.lcard-price{font-weight:700;font-size:.97rem;color:var(--primary)}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.tag{background:var(--primary-light);color:var(--primary);border-radius:999px;padding:2px 9px;font-size:.72rem;font-weight:600}
+.tag.amber{background:var(--warn-bg);color:var(--warn-text)}
+.sbadge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:999px;font-size:.7rem;font-weight:600}
+.s-disponivel{background:var(--success-bg);color:var(--success-text)}
+.s-vendido{background:var(--surface2);color:var(--text-muted);border:1px solid var(--border)}
+.s-negociando{background:var(--warn-bg);color:var(--warn-text)}
+.s-fechado{background:var(--success-bg);color:var(--success-text)}
+.s-em_transporte{background:var(--info-bg);color:var(--info-text)}
+.s-entregue{background:var(--success-bg);color:var(--success-text)}
+.s-concluido{background:var(--surface2);color:var(--text-muted)}
+.s-recusado,.s-cancelado{background:var(--danger-bg);color:var(--danger)}
+.deal-list{display:flex;flex-direction:column;gap:12px}
+.deal-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;cursor:pointer;transition:.2s}
+.deal-card:hover{border-color:var(--primary);box-shadow:var(--shadow)}
+.deal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+.deal-title{font-weight:600;font-size:.93rem;flex:1}
+.deal-meta{font-size:.78rem;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.deal-foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+.tcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;display:flex;flex-direction:column;gap:10px}
+.tcard-title{font-weight:700;font-size:.96rem}
+.tcard-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:.81rem;color:var(--text-muted)}
+.tcard-fee{font-weight:700;color:var(--primary);font-size:1.05rem}
+.tcard-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.empty{text-align:center;padding:52px 24px;color:var(--text-muted);grid-column:1/-1}
+.empty-icon{font-size:2.6rem;margin-bottom:12px;opacity:.3}
+.empty p{font-size:.88rem;line-height:1.6}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius-xl);padding:24px;width:100%;max-width:540px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.4);animation:modalIn .2s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.modal-wide{max-width:640px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-weight:700;font-size:1.05rem;display:flex;align-items:center;gap:8px}
+.modal-close{width:32px;height:32px;border:none;border-radius:50%;cursor:pointer;background:var(--surface2);color:var(--text-muted);font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:.2s}
+.modal-close:hover{background:var(--danger-bg);color:var(--danger)}
+.fg{margin-bottom:13px}
+.fl{display:block;font-size:.83rem;font-weight:500;color:var(--text-2);margin-bottom:4px}
+.fi,.fs,.ft{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface2);color:var(--text);font-size:.89rem;transition:.2s}
+.fi:focus,.fs:focus,.ft:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.ft{resize:vertical;min-height:78px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fhint{font-size:.73rem;color:var(--text-muted);margin-top:3px}
+.alert{padding:9px 13px;border-radius:var(--radius);font-size:.85rem;margin-bottom:12px;border:1px solid transparent;display:none}
+.alert.show{display:block}
+.alert-success{background:var(--success-bg);color:var(--success-text);border-color:var(--success-border)}
+.alert-error{background:var(--danger-bg);color:var(--danger);border-color:var(--danger-border)}
+.alert-info{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
+.btn{padding:9px 16px;border:none;border-radius:var(--radius);cursor:pointer;font-size:.86rem;font-weight:600;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}
+.btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}.btn-outline:hover{background:var(--primary-light)}
+.btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-danger{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-border)}.btn-danger:hover{background:var(--danger);color:#fff}
+.btn-sm{padding:6px 12px;font-size:.79rem}
+.btn-full{width:100%;justify-content:center}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.chat-box{display:flex;flex-direction:column;height:360px}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface2);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:10px}
+.bubble{max-width:78%;padding:9px 13px;border-radius:14px;font-size:.87rem;line-height:1.45}
+.bubble.mine{background:var(--primary);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.bubble.theirs{background:var(--surface);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:3px}
+.bubble-name{font-size:.68rem;font-weight:700;opacity:.75;margin-bottom:2px}
+.bubble-time{font-size:.66rem;opacity:.6;text-align:right;margin-top:3px}
+.chat-input{display:flex;gap:8px}
+.chat-input input{flex:1}
+.deal-info-bar{background:var(--primary-light);border:1px solid var(--border);border-radius:var(--radius);padding:10px 13px;margin-bottom:12px;font-size:.83rem}
+.deal-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.inbox-item{display:flex;gap:12px;padding:12px;cursor:pointer;border-bottom:1px solid var(--border);transition:.15s}
+.inbox-item:last-child{border-bottom:none}
+.inbox-item:hover{background:var(--primary-light)}
+.inbox-avatar{width:40px;height:40px;border-radius:50%;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;flex-shrink:0}
+.inbox-body{flex:1;min-width:0}
+.inbox-name{font-weight:600;font-size:.87rem;margin-bottom:2px;display:flex;align-items:center;gap:6px}
+.inbox-preview{font-size:.79rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inbox-time{font-size:.72rem;color:var(--text-muted);white-space:nowrap}
+.notif-item{padding:12px;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s}
+.notif-item:last-child{border-bottom:none}
+.notif-item:hover{background:var(--primary-light)}
+.notif-item.unread{background:var(--primary-light)}
+.notif-title{font-weight:600;font-size:.87rem;margin-bottom:2px}
+.notif-body{font-size:.79rem;color:var(--text-muted);margin-bottom:3px}
+.notif-time{font-size:.71rem;color:var(--text-muted)}
+.stars-row{display:flex;gap:6px;justify-content:center;margin:12px 0}
+.star-btn{background:none;border:none;cursor:pointer;font-size:1.8rem;color:var(--border2);transition:color .15s,transform .1s}
+.star-btn:hover{transform:scale(1.15)}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-weight:700;font-size:.98rem}
+.spin{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:_spin .6s linear infinite}
+@keyframes _spin{to{transform:rotate(360deg)}}
+@media(max-width:600px){.frow{grid-template-columns:1fr}.nav-center{display:none}.grid{grid-template-columns:1fr}.modal{padding:16px}.tab-btn{padding:8px 10px;font-size:.79rem}.fi-sm{width:75px}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-brand">🌱 AgroTech Platform</div>
+  <div class="nav-center">
+    <a href="/app" class="nav-link">&#127807; Analise de Solo</a>
+    <a href="/mercado" class="nav-link active">&#128722; Mercado</a>
+  </div>
+  <div class="nav-right">
+    <button class="icon-btn" id="btnInbox" title="Mensagens">
+      <i class="fa-solid fa-envelope"></i>
+      <span class="n-badge" id="unreadBadge" style="display:none">0</span>
+    </button>
+    <button class="icon-btn" id="btnNotif" title="Notificacoes">
+      <i class="fa-solid fa-bell"></i>
+      <span class="n-badge" id="notifBadge" style="display:none">0</span>
+    </button>
+    <button class="icon-btn" id="btnTheme" title="Alternar tema">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+    <button class="icon-btn logout" onclick="logout()" title="Sair">
+      <i class="fa-solid fa-right-from-bracket"></i>
+    </button>
+  </div>
+</nav>
+<div class="wrapper">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Mercado <span>Local</span></div>
+      <div style="font-size:.84rem;color:var(--text-muted);margin-top:2px">Conectando produtores, compradores e transportadores</div>
+    </div>
+    <button class="btn btn-primary" onclick="openNewListing()" id="btnNewListing" style="display:none">
+      <i class="fa-solid fa-plus"></i> Nova Publicacao
+    </button>
+  </div>
+  <div class="my-profile" id="profileBar" style="display:none">
+    <div class="profile-avatar" id="profileAvatar">?</div>
+    <div class="profile-info">
+      <h2 id="profileName">...</h2>
+      <p id="profileEmail"></p>
+      <div class="type-pill" id="profileTypePill"></div>
+    </div>
+  </div>
+  <div class="stats-bar" id="statsBar"></div>
+  <div class="tabs-row">
+    <button class="tab-btn active" id="tabVitrine" onclick="switchTab('Vitrine')">
+      <i class="fa-solid fa-store"></i> Vitrine
+    </button>
+    <button class="tab-btn" id="tabMinhas" onclick="switchTab('Minhas')">
+      <i class="fa-solid fa-seedling"></i> Minhas Publicacoes
+    </button>
+    <button class="tab-btn" id="tabNegocios" onclick="switchTab('Negocios')">
+      <i class="fa-solid fa-handshake"></i> Negocios
+      <span class="tab-badge" id="badgeNegocios" style="display:none">0</span>
+    </button>
+    <button class="tab-btn" id="tabTransporte" onclick="switchTab('Transporte')">
+      <i class="fa-solid fa-truck"></i> Transportes
+    </button>
+  </div>
+  <div class="panel active" id="panelVitrine">
+    <div class="filter-bar">
+      <input class="fi fi-grow" type="text" id="searchCrop" placeholder="Buscar cultura, produto...">
+      <select class="fi" id="filterState">
+        <option value="">Todos os estados</option>
+        <option>AC</option><option>AL</option><option>AM</option><option>AP</option>
+        <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+        <option>GO</option><option>MA</option><option>MG</option><option>MS</option>
+        <option>MT</option><option>PA</option><option>PB</option><option>PE</option>
+        <option>PI</option><option>PR</option><option>RJ</option><option>RN</option>
+        <option>RO</option><option>RR</option><option>RS</option><option>SC</option>
+        <option>SE</option><option>SP</option><option>TO</option>
+      </select>
+      <input class="fi fi-sm" type="number" id="filterMinPrice" placeholder="R$ min" min="0" step="0.01">
+      <input class="fi fi-sm" type="number" id="filterMaxPrice" placeholder="R$ max" min="0" step="0.01">
+      <select class="fi" id="filterOrder">
+        <option value="">Mais recentes</option>
+        <option value="price_asc">Menor preco</option>
+        <option value="price_desc">Maior preco</option>
+        <option value="qty_desc">Maior quantidade</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" onclick="loadListings()"><i class="fa-solid fa-rotate"></i></button>
+    </div>
+    <div class="grid" id="listingsGrid">
+      <div class="empty"><div class="spin"></div><p style="margin-top:10px">Carregando...</p></div>
+    </div>
+  </div>
+  <div class="panel" id="panelMinhas">
+    <div class="section-head">
+      <div class="section-title">Suas Publicacoes</div>
+      <button class="btn btn-primary btn-sm" onclick="openNewListing()"><i class="fa-solid fa-plus"></i> Nova</button>
+    </div>
+    <div class="grid" id="myListingsGrid">
+      <div class="empty"><p>Nenhuma publicacao ainda.</p></div>
+    </div>
+  </div>
+  <div class="panel" id="panelNegocios">
+    <div class="alert alert-info show" style="margin-bottom:16px">
+      <i class="fa-solid fa-circle-info"></i> Clique em um negocio para ver a conversa.
+    </div>
+    <div class="deal-list" id="dealsContainer">
+      <div class="empty"><div class="spin"></div><p style="margin-top:10px">Carregando...</p></div>
+    </div>
+  </div>
+  <div class="panel" id="panelTransporte">
+    <div class="alert alert-info show" style="margin-bottom:16px">
+      <i class="fa-solid fa-truck"></i> Negocios fechados aguardando transportador.
+    </div>
+    <div class="deal-list" id="transportsContainer">
+      <div class="empty"><div class="spin"></div><p style="margin-top:10px">Verificando...</p></div>
+    </div>
+  </div>
+</div>
+<!-- MODAL NOVA PUBLICACAO -->
+<div class="overlay" id="modalNewListing">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title"><i class="fa-solid fa-seedling" style="color:var(--primary)"></i> Nova Publicacao</span>
+      <button class="modal-close" onclick="closeModal('modalNewListing')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="alert" id="listingAlert"></div>
+    <form id="listingForm" onsubmit="submitListing(event)">
+      <div class="fg"><label class="fl">Titulo *</label><input class="fi" name="title" placeholder="Ex: Cana organica Safra 2026" required></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Cultura *</label><input class="fi" name="crop" placeholder="Ex: Cana, Soja" required></div>
+        <div class="fg"><label class="fl">Quantidade (kg) *</label><input class="fi" name="quantity_kg" type="number" min="1" placeholder="5000" required></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Preco/kg (R$) *</label><input class="fi" name="price_per_kg" type="number" step="0.01" min="0.01" placeholder="0.80" required></div>
+        <div class="fg"><label class="fl">Estado *</label>
+          <select class="fs" name="state" required>
+            <option value="">Selecionar...</option>
+            <option>AC</option><option>AL</option><option>AM</option><option>AP</option>
+            <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+            <option>GO</option><option>MA</option><option>MG</option><option>MS</option>
+            <option>MT</option><option>PA</option><option>PB</option><option>PE</option>
+            <option>PI</option><option>PR</option><option>RJ</option><option>RN</option>
+            <option>RO</option><option>RR</option><option>RS</option><option>SC</option>
+            <option>SE</option><option>SP</option><option>TO</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Cidade *</label><input class="fi" name="city" placeholder="Ex: Santarem" required></div>
+      <div class="fg"><label class="fl">Descricao</label><textarea class="ft" name="description" placeholder="Metodo de cultivo, qualidade..."></textarea></div>
+      <div class="fg">
+        <label class="fl">Foto (opcional)</label>
+        <input type="file" class="fi" name="image" accept="image/jpeg,image/png,image/webp" style="padding:6px">
+        <p class="fhint">JPG, PNG ou WEBP.</p>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" id="listingSubmitBtn">
+        <i class="fa-solid fa-upload"></i> Publicar agora
+      </button>
+    </form>
+  </div>
+</div>
+<!-- MODAL DETALHE -->
+<div class="overlay" id="modalListing">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <span class="modal-title" id="mlTitle">Publicacao</span>
+      <button class="modal-close" onclick="closeModal('modalListing')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="mlBody"></div>
+  </div>
+</div>
+<!-- MODAL CHAT -->
+<div class="overlay" id="modalChat">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <span class="modal-title" id="chatTitle"><i class="fa-solid fa-comments" style="color:var(--primary)"></i> Conversa</span>
+      <button class="modal-close" onclick="closeModal('modalChat')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="deal-info-bar" id="chatDealBar"></div>
+    <div class="deal-actions" id="chatActions"></div>
+    <div class="chat-box">
+      <div class="chat-msgs" id="chatMsgs"></div>
+      <div class="chat-input">
+        <input class="fi" id="chatInput" placeholder="Digite sua mensagem..."
+               onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}">
+        <button class="btn btn-primary" onclick="sendMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL INBOX -->
+<div class="overlay" id="modalInbox">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title"><i class="fa-solid fa-inbox" style="color:var(--primary)"></i> Caixa de Entrada</span>
+      <button class="modal-close" onclick="closeModal('modalInbox')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="inboxList"></div>
+  </div>
+</div>
+<!-- MODAL NOTIFICACOES -->
+<div class="overlay" id="modalNotif">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title"><i class="fa-solid fa-bell" style="color:var(--primary)"></i> Notificacoes</span>
+      <button class="modal-close" onclick="closeModal('modalNotif')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="notifList"></div>
+  </div>
+</div>
+<!-- MODAL TRANSPORTE -->
+<div class="overlay" id="modalTransport">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title"><i class="fa-solid fa-truck" style="color:var(--primary)"></i> Assumir Transporte</span>
+      <button class="modal-close" onclick="closeModal('modalTransport')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="alert" id="transportAlert"></div>
+    <div id="transportDetail" style="margin-bottom:14px"></div>
+    <div class="fg">
+      <label class="fl">Valor do frete (R$) *</label>
+      <input class="fi" id="transportFee" type="number" step="0.01" min="0" placeholder="Ex: 350.00">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="confirmTransport()">
+      <i class="fa-solid fa-check"></i> Confirmar transporte
+    </button>
+  </div>
+</div>
+<!-- MODAL AVALIAR -->
+<div class="overlay" id="modalRating">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title"><i class="fa-solid fa-star" style="color:#F59E0B"></i> Avaliar Negocio</span>
+      <button class="modal-close" onclick="closeModal('modalRating')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="alert" id="ratingAlert"></div>
+    <p style="font-size:.87rem;color:var(--text-muted);margin-bottom:8px;text-align:center">Quanto voce avalia este negocio?</p>
+    <div class="stars-row" id="starsRow">
+      <button class="star-btn" onclick="highlightStars(1)">&#9733;</button>
+      <button class="star-btn" onclick="highlightStars(2)">&#9733;</button>
+      <button class="star-btn" onclick="highlightStars(3)">&#9733;</button>
+      <button class="star-btn" onclick="highlightStars(4)">&#9733;</button>
+      <button class="star-btn" onclick="highlightStars(5)">&#9733;</button>
+    </div>
+    <input type="hidden" id="ratingStars" value="5">
+    <div class="fg"><label class="fl">Comentario (opcional)</label><textarea class="ft" id="ratingComment" placeholder="Descreva sua experiencia..."></textarea></div>
+    <button class="btn btn-primary btn-full" onclick="submitRating()"><i class="fa-solid fa-paper-plane"></i> Enviar Avaliacao</button>
+  </div>
+</div>
+<!-- MODAL PERFIL PUBLICO -->
+<div class="overlay" id="modalProfilePublic">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <span class="modal-title"><i class="fa-solid fa-user-circle" style="color:var(--primary)"></i> Perfil do Produtor</span>
+      <button class="modal-close" onclick="closeModal('modalProfilePublic')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="profilePublicBody"></div>
+  </div>
+</div>
+<script>
+var currentUser=null,userType='produtor',activeDeal=null,activeTrans=null,chatTimer=null;
+var getToken=function(){return localStorage.getItem('access_token')||'';};
+var ah=function(extra){var h={'Authorization':'Bearer '+getToken()};if(extra){for(var k in extra)h[k]=extra[k];}return h;};
+function logout(){localStorage.removeItem('access_token');localStorage.removeItem('refresh_token');localStorage.removeItem('user');window.location.href='/';}
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('btnTheme').innerHTML=t==='dark'?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';localStorage.setItem('theme',t);}
+document.getElementById('btnTheme').addEventListener('click',function(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');});
+applyTheme(localStorage.getItem('theme')||'light');
+async function init(){
+  if(!getToken()){window.location.href='/';return;}
+  try{var r=await fetch('/api/auth/me',{headers:ah()});if(!r.ok){logout();return;}currentUser=await r.json();userType=currentUser.user_type||'produtor';}catch(e){logout();return;}
+  renderProfileBar();loadStats();loadListings();pollUnreadAll();
+  var db;
+  document.getElementById('searchCrop').addEventListener('input',function(){clearTimeout(db);db=setTimeout(loadListings,400);});
+  document.getElementById('filterState').addEventListener('change',loadListings);
+  document.getElementById('filterOrder').addEventListener('change',loadListings);
+  document.getElementById('filterMinPrice').addEventListener('input',function(){clearTimeout(db);db=setTimeout(loadListings,500);});
+  document.getElementById('filterMaxPrice').addEventListener('input',function(){clearTimeout(db);db=setTimeout(loadListings,500);});
+  document.getElementById('btnInbox').addEventListener('click',function(){loadInbox();openModal('modalInbox');});
+  document.getElementById('btnNotif').addEventListener('click',function(){loadNotifications();openModal('modalNotif');});
+}
+function renderProfileBar(){
+  document.getElementById('profileBar').style.display='flex';
+  document.getElementById('profileAvatar').textContent=(currentUser.name||'?')[0].toUpperCase();
+  document.getElementById('profileName').textContent=currentUser.name;
+  document.getElementById('profileEmail').textContent=currentUser.email;
+  var m={produtor:'Produtor',comprador:'Comprador',transportador:'Transportador'};
+  document.getElementById('profileTypePill').textContent=m[userType]||userType;
+  if(userType==='produtor')document.getElementById('btnNewListing').style.display='';
+}
+async function loadStats(){
+  var bar=document.getElementById('statsBar');
+  if(!bar||userType!=='produtor')return;
+  try{var r=await fetch('/api/market/stats/me',{headers:ah()});if(!r.ok)return;var s=await r.json();
+  bar.style.display='flex';
+  bar.innerHTML='<div class="stat-card"><div class="stat-val">'+s.active_listings+'</div><div class="stat-lbl">Anuncios Ativos</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+s.closed_deals+'</div><div class="stat-lbl">Negocios Fechados</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+fmtQty(s.total_kg)+'</div><div class="stat-lbl">Total Negociado</div></div>'+
+    '<div class="stat-card"><div class="stat-val">R$ '+fmtPrice(s.total_brl)+'</div><div class="stat-lbl">Volume (R$)</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+(s.rating_count>0?s.rating_avg:'---')+'</div><div class="stat-lbl">'+(s.rating_count>0?s.rating_count+' avaliacao(es)':'Sem avaliacoes')+'</div></div>';
+  }catch(e){}
+}
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('tab'+name).classList.add('active');
+  document.getElementById('panel'+name).classList.add('active');
+  if(name==='Vitrine')loadListings();
+  if(name==='Minhas')loadMyListings();
+  if(name==='Negocios')loadDeals();
+  if(name==='Transporte')loadTransports();
+}
+async function loadListings(){
+  var crop=(document.getElementById('searchCrop').value||'').trim();
+  var state=document.getElementById('filterState').value;
+  var order=document.getElementById('filterOrder').value;
+  var minPrice=document.getElementById('filterMinPrice').value;
+  var maxPrice=document.getElementById('filterMaxPrice').value;
+  var url='/api/market/listings?';
+  if(crop)url+='crop='+encodeURIComponent(crop)+'&';
+  if(state)url+='state='+encodeURIComponent(state)+'&';
+  if(order)url+='order_by='+encodeURIComponent(order)+'&';
+  if(minPrice)url+='min_price='+encodeURIComponent(minPrice)+'&';
+  if(maxPrice)url+='max_price='+encodeURIComponent(maxPrice)+'&';
+  var grid=document.getElementById('listingsGrid');
+  grid.innerHTML='<div class="empty"><div class="spin"></div><p style="margin-top:10px">Buscando...</p></div>';
+  try{
+    var r=await fetch(url,{headers:ah()});var d=await r.json();
+    if(!d.listings||!d.listings.length){grid.innerHTML='<div class="empty"><p>Nenhuma publicacao encontrada.</p></div>';return;}
+    var html='';
+    d.listings.forEach(function(l){
+      var stars=l.producer_rating?renderStars(l.producer_rating):'';
+      var pb=l.price_badge?'<div><span class="price-badge '+(l.price_vs_avg_pct<0?'badge-green':'badge-warn')+'">'+esc(l.price_badge)+'</span></div>':'';
+      var img=l.image_path?'<img src="'+esc(l.image_path)+'" alt="" loading="lazy">':'<i class="fa-solid fa-seedling"></i>';
+      html+='<div class="lcard" onclick="openListing('+l.id+')">'+
+        '<div class="lcard-img">'+img+'</div>'+
+        '<div class="lcard-body">'+
+          '<div class="lcard-title">'+esc(l.title)+'</div>'+
+          '<div class="lcard-sub">'+(stars?stars+' ':'')+esc(l.producer_name)+' - '+esc(l.city||'')+' '+esc(l.state||'')+'</div>'+
+          '<div class="tags"><span class="tag">'+esc(l.crop)+'</span><span class="tag amber">'+fmtQty(l.quantity_kg)+'</span></div>'+
+          pb+
+          '<div class="lcard-row"><span class="lcard-price">R$ '+fmtPrice(l.price_per_kg)+'<small style="font-weight:400;font-size:.73rem">/kg</small></span>'+
+          '<span class="sbadge s-'+l.status+'">'+statusLabel(l.status)+'</span></div>'+
+        '</div></div>';
+    });
+    grid.innerHTML=html;
+  }catch(e){grid.innerHTML='<div class="empty"><p>Erro ao carregar.</p></div>';}
+}
+async function openListing(id){
+  var r=await fetch('/api/market/listings/'+id,{headers:ah()});if(!r.ok)return;var l=await r.json();
+  document.getElementById('mlTitle').innerHTML='<i class="fa-solid fa-seedling" style="color:var(--primary)"></i> '+esc(l.title);
+  var isOwner=l.user_id===currentUser.user_id;
+  var canBuy=!isOwner&&l.status==='disponivel'&&userType==='comprador';
+  var total=(parseFloat(l.price_per_kg)||0)*(parseFloat(l.quantity_kg)||0);
+  var stars=l.producer_rating?'<span style="font-size:.82rem">'+renderStars(l.producer_rating)+' ('+l.producer_rating_count+')</span>':'';
+  var body='';
+  if(l.image_path)body+='<img src="'+esc(l.image_path)+'" style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius-lg);margin-bottom:14px">';
+  body+='<div class="tags" style="margin-bottom:12px"><span class="tag">'+esc(l.crop)+'</span><span class="tag amber">'+fmtQty(l.quantity_kg)+'</span><span class="sbadge s-'+l.status+'" style="margin-left:4px">'+statusLabel(l.status)+'</span></div>';
+  body+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.86rem;margin-bottom:12px">'+
+    '<div><span style="color:var(--text-muted)">Produtor</span><br><b>'+esc(l.producer_name)+'</b> '+stars+' <span style="cursor:pointer;font-size:.78rem;color:var(--primary)" onclick="openProducerProfile('+l.user_id+')">ver perfil</span></div>'+
+    '<div><span style="color:var(--text-muted)">Localizacao</span><br><b>'+esc(l.city||'')+', '+esc(l.state||'')+'</b></div>'+
+    '<div><span style="color:var(--text-muted)">Preco/kg</span><br><b style="color:var(--primary)">R$ '+fmtPrice(l.price_per_kg)+'</b></div>'+
+    '<div><span style="color:var(--text-muted)">Total aprox.</span><br><b>R$ '+fmtPrice(total)+'</b></div></div>';
+  if(l.description)body+='<p style="font-size:.85rem;color:var(--text-muted);margin-bottom:14px;line-height:1.55">'+esc(l.description)+'</p>';
+  body+='<div style="display:flex;gap:8px;flex-wrap:wrap">';
+  if(canBuy)body+='<button class="btn btn-primary" onclick="startDeal('+l.id+')"><i class="fa-solid fa-handshake"></i> Negociar</button>';
+  if(l.whatsapp)body+='<a href="https://wa.me/55'+l.whatsapp.replace(/\D/g,'')+'" target="_blank" class="btn btn-outline"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>';
+  body+='<button class="btn btn-ghost btn-sm" onclick="shareListing('+l.id+')"><i class="fa-solid fa-share-nodes"></i> Compartilhar</button>';
+  if(isOwner)body+='<button class="btn btn-danger btn-sm" onclick="deleteListing('+l.id+')"><i class="fa-solid fa-trash"></i> Remover</button>';
+  body+='</div>';
+  document.getElementById('mlBody').innerHTML=body;openModal('modalListing');
+}
+function shareListing(id){
+  var url=location.origin+'/mercado';
+  if(navigator.share){navigator.share({title:'AgroTech Platform',url:url}).catch(function(){});}
+  else{navigator.clipboard.writeText(url).then(function(){showToast('Link copiado!','success');});}
+}
+async function startDeal(listingId){
+  var r=await fetch('/api/market/deals',{method:'POST',headers:ah({'Content-Type':'application/json'}),body:JSON.stringify({listing_id:listingId})});
+  var d=await r.json();
+  if(d.success||d.deal_id){closeModal('modalListing');await openDealChat(d.deal_id);}
+  else showToast(d.detail||d.error||'Erro ao iniciar negociacao.','error');
+}
+async function deleteListing(id){
+  if(!confirm('Remover esta publicacao?'))return;
+  await fetch('/api/market/listings/'+id,{method:'DELETE',headers:ah()});
+  closeModal('modalListing');loadListings();loadMyListings();showToast('Removida.','success');
+}
+async function loadMyListings(){
+  var grid=document.getElementById('myListingsGrid');
+  grid.innerHTML='<div class="empty"><div class="spin"></div></div>';
+  var r=await fetch('/api/market/listings/mine',{headers:ah()});var d=await r.json();
+  if(!d.listings||!d.listings.length){grid.innerHTML='<div class="empty"><p>Nenhuma publicacao ainda.</p></div>';return;}
+  var html='';
+  d.listings.forEach(function(l){
+    var img=l.image_path?'<img src="'+esc(l.image_path)+'" loading="lazy">':'<i class="fa-solid fa-seedling"></i>';
+    html+='<div class="lcard" onclick="openListing('+l.id+')">'+
+      '<div class="lcard-img">'+img+'</div>'+
+      '<div class="lcard-body">'+
+        '<div class="lcard-title">'+esc(l.title)+'</div>'+
+        '<div class="tags"><span class="tag">'+esc(l.crop)+'</span><span class="tag amber">'+fmtQty(l.quantity_kg)+'</span></div>'+
+        '<div class="lcard-row"><span class="lcard-price">R$ '+fmtPrice(l.price_per_kg)+'/kg</span><span class="sbadge s-'+l.status+'">'+statusLabel(l.status)+'</span></div>'+
+        '<div style="margin-top:8px;text-align:right"><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteListing('+l.id+')"><i class="fa-solid fa-trash"></i> Remover</button></div>'+
+      '</div></div>';
+  });
+  grid.innerHTML=html;
+}
+function openNewListing(){document.getElementById('listingForm').reset();setAlert('listingAlert','','');openModal('modalNewListing');}
+async function submitListing(e){
+  e.preventDefault();
+  var btn=document.getElementById('listingSubmitBtn');btn.disabled=true;btn.innerHTML='Publicando...';
+  try{
+    var fd=new FormData(document.getElementById('listingForm'));
+    var r=await fetch('/api/market/listings',{method:'POST',headers:ah(),body:fd});var d=await r.json();
+    if(d.success){setAlert('listingAlert',d.message,'success');document.getElementById('listingForm').reset();setTimeout(function(){closeModal('modalNewListing');loadListings();loadMyListings();loadStats();},1200);}
+    else setAlert('listingAlert',d.detail||'Erro ao publicar.','error');
+  }catch(e){setAlert('listingAlert','Erro de conexao.','error');}
+  btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-upload"></i> Publicar agora';
+}
+async function loadDeals(){
+  var cont=document.getElementById('dealsContainer');cont.innerHTML='<div class="empty"><div class="spin"></div></div>';
+  var r=await fetch('/api/market/deals',{headers:ah()});var d=await r.json();
+  var badge=document.getElementById('badgeNegocios');
+  if(d.deals&&d.deals.length){badge.textContent=d.deals.length;badge.style.display='';}else badge.style.display='none';
+  if(!d.deals||!d.deals.length){cont.innerHTML='<div class="empty"><p>Nenhum negocio ainda.</p></div>';return;}
+  var html='';
+  d.deals.forEach(function(deal){
+    html+='<div class="deal-card" onclick="openDealChat('+deal.id+')">'+
+      '<div class="deal-head"><span class="deal-title">'+esc(deal.listing_title)+'</span><span class="sbadge s-'+deal.status+'">'+statusLabel(deal.status)+'</span></div>'+
+      '<div class="deal-meta"><span>'+esc(deal.crop)+'</span><span>'+fmtQty(deal.quantity_kg)+'</span><span>R$ '+fmtPrice(deal.price_per_kg)+'/kg</span>'+(deal.listing_state?'<span>'+esc(deal.listing_state)+'</span>':'')+'</div>'+
+      '<div class="deal-foot"><span style="font-size:.77rem;color:var(--text-muted)">'+esc(deal.producer_name)+' / '+esc(deal.buyer_name)+(deal.transporter_name?' / '+esc(deal.transporter_name):'')+'</span><span style="font-size:.73rem;color:var(--text-muted)">'+fmtDate(deal.updated_at,true)+'</span></div>'+
+    '</div>';
+  });
+  cont.innerHTML=html;
+}
+async function openDealChat(dealId){
+  clearInterval(chatTimer);activeDeal=dealId;
+  var r=await fetch('/api/market/messages/deal/'+dealId,{headers:ah()});
+  if(!r.ok){showToast('Nao foi possivel abrir.','error');return;}
+  var data=await r.json();var deal=data.deal;
+  document.getElementById('chatTitle').innerHTML='<i class="fa-solid fa-comments" style="color:var(--primary)"></i> '+esc(deal.listing_title);
+  document.getElementById('chatDealBar').innerHTML=
+    '<div><b>'+esc(deal.listing_title)+'</b> <span class="sbadge s-'+deal.status+'">'+statusLabel(deal.status)+'</span></div>'+
+    '<div style="font-size:.78rem;color:var(--text-muted);margin-top:4px">'+esc(deal.crop)+' - '+fmtQty(deal.quantity_kg)+' - R$ '+fmtPrice(deal.price_per_kg)+'/kg'+(deal.transport_fee?' - Frete: R$ '+fmtPrice(deal.transport_fee):'')+'</div>'+
+    '<div style="font-size:.78rem;color:var(--text-muted);margin-top:2px">'+esc(deal.producer_name)+' / '+esc(deal.buyer_name)+(deal.transporter_name?' / '+esc(deal.transporter_name):'')+'</div>';
+  renderDealActions(deal);renderMsgs(data.messages);pollUnreadAll();openModal('modalChat');
+  chatTimer=setInterval(async function(){
+    if(!document.getElementById('modalChat').classList.contains('open')){clearInterval(chatTimer);return;}
+    var rp=await fetch('/api/market/messages/deal/'+dealId,{headers:ah()});if(!rp.ok)return;
+    var dp=await rp.json();renderMsgs(dp.messages);renderDealActions(dp.deal);
+  },3000);
+}
+function renderDealActions(deal){
+  var uid=currentUser.user_id,isProducer=deal.producer_id===uid,isBuyer=deal.buyer_id===uid;
+  var acts=document.getElementById('chatActions');acts.innerHTML='';
+  if(isProducer&&deal.status==='negociando'){
+    acts.innerHTML+='<button class="btn btn-primary btn-sm" onclick="updateStatus('+deal.id+',\'fechado\')"><i class="fa-solid fa-check"></i> Aceitar</button>'+
+      '<button class="btn btn-danger btn-sm" onclick="updateStatus('+deal.id+',\'recusado\')"><i class="fa-solid fa-xmark"></i> Recusar</button>';
+  }
+  if((isProducer||isBuyer)&&deal.status==='em_transporte'){
+    acts.innerHTML+='<button class="btn btn-primary btn-sm" onclick="updateStatus('+deal.id+',\'entregue\')"><i class="fa-solid fa-box-open"></i> Confirmar Entrega</button>';
+  }
+  if((isProducer||isBuyer)&&(deal.status==='entregue'||deal.status==='concluido')&&deal.can_rate){
+    var otherId=isProducer?deal.buyer_id:deal.producer_id;
+    acts.innerHTML+='<button class="btn btn-outline btn-sm" onclick="openRatingModal('+deal.id+','+otherId+')"><i class="fa-solid fa-star"></i> Avaliar</button>';
+  }
+  if((isProducer||isBuyer)&&(deal.status==='negociando'||deal.status==='fechado')){
+    acts.innerHTML+='<button class="btn btn-ghost btn-sm" onclick="updateStatus('+deal.id+',\'cancelado\')">Cancelar</button>';
+  }
+}
+function renderMsgs(msgs){
+  var box=document.getElementById('chatMsgs'),uid=currentUser.user_id;
+  if(!msgs||!msgs.length){box.innerHTML='<div style="text-align:center;padding:24px;color:var(--text-muted)">Nenhuma mensagem ainda.</div>';return;}
+  var html='';
+  msgs.forEach(function(m){
+    var mine=m.sender_id===uid;
+    html+='<div class="bubble '+(mine?'mine':'theirs')+'">'+(!mine?'<div class="bubble-name">'+esc(m.sender_name)+'</div>':'')+esc(m.content)+'<div class="bubble-time">'+fmtDate(m.created_at,true)+'</div></div>';
+  });
+  box.innerHTML=html;box.scrollTop=box.scrollHeight;
+}
+async function sendMsg(){
+  var input=document.getElementById('chatInput'),msg=input.value.trim();
+  if(!msg||!activeDeal)return;input.value='';
+  var r=await fetch('/api/market/deals/'+activeDeal,{headers:ah()});var deal=await r.json();
+  var receiverId=deal.producer_id===currentUser.user_id?deal.buyer_id:deal.producer_id;
+  await fetch('/api/market/messages',{method:'POST',headers:ah({'Content-Type':'application/json'}),body:JSON.stringify({receiver_id:receiverId,content:msg,deal_id:activeDeal})});
+  var rp=await fetch('/api/market/messages/deal/'+activeDeal,{headers:ah()});var dp=await rp.json();renderMsgs(dp.messages);
+}
+async function updateStatus(dealId,status){
+  var r=await fetch('/api/market/deals/'+dealId+'/status',{method:'PATCH',headers:ah({'Content-Type':'application/json'}),body:JSON.stringify({status:status})});
+  var d=await r.json();
+  if(d.success){showToast(d.message,'success');clearInterval(chatTimer);closeModal('modalChat');loadDeals();loadStats();}
+  else showToast(d.detail||'Erro ao atualizar.','error');
+}
+async function loadTransports(){
+  var cont=document.getElementById('transportsContainer');cont.innerHTML='<div class="empty"><div class="spin"></div></div>';
+  var r=await fetch('/api/market/deals/transports',{headers:ah()});var d=await r.json();
+  if(!d.transports||!d.transports.length){cont.innerHTML='<div class="empty"><p>Nenhum transporte disponivel.</p></div>';return;}
+  var html='';
+  d.transports.forEach(function(t){
+    html+='<div class="tcard"><div class="tcard-title">'+esc(t.listing_title)+'</div>'+
+      '<div class="tcard-meta"><span>'+esc(t.crop)+'</span><span>'+fmtQty(t.quantity_kg)+'</span><span>'+esc(t.listing_city||'')+', '+esc(t.listing_state||'')+'</span></div>'+
+      '<div class="tcard-meta"><span>Produtor: <b>'+esc(t.producer_name)+'</b></span><span>Comprador: <b>'+esc(t.buyer_name)+'</b></span></div>'+
+      (t.transport_fee?'<div class="tcard-fee">Frete ofertado: R$ '+fmtPrice(t.transport_fee)+'</div>':'<div style="font-size:.81rem;color:var(--text-muted)">Frete a combinar</div>')+
+      '<div class="tcard-actions"><button class="btn btn-primary btn-sm" onclick="openTransportModal('+t.id+')"><i class="fa-solid fa-truck"></i> Assumir</button></div></div>';
+  });
+  cont.innerHTML=html;
+}
+async function openTransportModal(dealId){
+  activeTrans=dealId;
+  var r=await fetch('/api/market/deals/'+dealId,{headers:ah()});var d=await r.json();
+  document.getElementById('transportDetail').innerHTML='<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:.85rem"><b>'+esc(d.listing_title)+'</b><br><span style="color:var(--text-muted)">'+esc(d.crop)+' - '+fmtQty(d.quantity_kg)+'</span></div>';
+  document.getElementById('transportFee').value='';setAlert('transportAlert','','');openModal('modalTransport');
+}
+async function confirmTransport(){
+  var fee=parseFloat(document.getElementById('transportFee').value);
+  if(isNaN(fee)||fee<0){setAlert('transportAlert','Informe um valor valido.','error');return;}
+  var r=await fetch('/api/market/deals/'+activeTrans+'/status',{method:'PATCH',headers:ah({'Content-Type':'application/json'}),body:JSON.stringify({status:'em_transporte',transport_fee:fee})});
+  var d=await r.json();
+  if(d.success){setAlert('transportAlert',d.message,'success');setTimeout(function(){closeModal('modalTransport');loadTransports();loadDeals();},1300);}
+  else setAlert('transportAlert',d.detail||'Erro.','error');
+}
+async function loadInbox(){
+  var list=document.getElementById('inboxList');list.innerHTML='<div style="text-align:center;padding:24px"><div class="spin"></div></div>';
+  var r=await fetch('/api/market/messages/inbox',{headers:ah()});var d=await r.json();
+  if(!d.inbox||!d.inbox.length){list.innerHTML='<div class="empty"><p>Nenhuma mensagem ainda.</p></div>';return;}
+  var html='';
+  d.inbox.forEach(function(m){
+    html+='<div class="inbox-item" onclick="closeModal(\'modalInbox\');openDealChat('+m.deal_id+')">'+
+      '<div class="inbox-avatar">'+(m.other_name||'?')[0].toUpperCase()+'</div>'+
+      '<div class="inbox-body"><div class="inbox-name">'+esc(m.other_name||'Usuario')+(m.unread>0?'<span class="n-badge" style="position:static">'+m.unread+'</span>':'')+'</div>'+
+      '<div class="inbox-preview">'+esc((m.listing_title?m.listing_title+': ':'')+(m.last_message||''))+'</div></div>'+
+      '<div class="inbox-time">'+fmtDate(m.created_at,true)+'</div></div>';
+  });
+  list.innerHTML=html;
+}
+async function loadNotifications(){
+  var list=document.getElementById('notifList');list.innerHTML='<div style="text-align:center;padding:24px"><div class="spin"></div></div>';
+  var r=await fetch('/api/market/notifications',{headers:ah()});var d=await r.json();
+  if(d.unread>0){fetch('/api/market/notifications/read',{method:'PATCH',headers:ah()});document.getElementById('notifBadge').style.display='none';}
+  if(!d.notifications||!d.notifications.length){list.innerHTML='<div class="empty"><p>Nenhuma notificacao ainda.</p></div>';return;}
+  var html='';
+  d.notifications.forEach(function(n){
+    var oc=n.deal_id?'closeModal(\'modalNotif\');openDealChat('+n.deal_id+')':'';
+    html+='<div class="notif-item '+(n.read_at?'':'unread')+'" onclick="'+oc+'">'+
+      '<div class="notif-title">'+esc(n.title)+'</div>'+
+      '<div class="notif-body">'+esc(n.body)+'</div>'+
+      '<div class="notif-time">'+fmtDate(n.created_at,true)+'</div></div>';
+  });
+  list.innerHTML=html;
+}
+async function pollUnreadAll(){
+  try{
+    var r1=await fetch('/api/market/messages/unread',{headers:ah()});
+    if(r1.ok){var d1=await r1.json();var b=document.getElementById('unreadBadge');if(d1.unread>0){b.textContent=d1.unread;b.style.display='';}else b.style.display='none';}
+    var r2=await fetch('/api/market/notifications',{headers:ah()});
+    if(r2.ok){var d2=await r2.json();var nb=document.getElementById('notifBadge');if(d2.unread>0){nb.textContent=d2.unread;nb.style.display='';}else nb.style.display='none';}
+  }catch(e){}
+  setTimeout(pollUnreadAll,8000);
+}
+function renderStars(avg){
+  if(!avg)return'';
+  var full=Math.floor(avg),half=(avg-full)>=0.5?1:0,empty=5-full-half;
+  return '<span style="color:#F59E0B;font-size:.8rem">'+'&#9733;'.repeat(full)+(half?'&#189;':'')+'&#9734;'.repeat(empty)+' '+parseFloat(avg).toFixed(1)+'</span>';
+}
+var _ratingDealId=null,_ratingRatedId=null;
+function openRatingModal(dealId,ratedId){
+  _ratingDealId=dealId;_ratingRatedId=ratedId;
+  document.getElementById('ratingStars').value='5';document.getElementById('ratingComment').value='';
+  setAlert('ratingAlert','','');highlightStars(5);openModal('modalRating');
+}
+function highlightStars(n){
+  document.querySelectorAll('.star-btn').forEach(function(btn,i){btn.style.color=i<n?'#F59E0B':'var(--border2)';});
+  document.getElementById('ratingStars').value=n;
+}
+async function submitRating(){
+  var stars=parseInt(document.getElementById('ratingStars').value);
+  var comment=document.getElementById('ratingComment').value.trim();
+  if(!stars){setAlert('ratingAlert','Selecione as estrelas.','error');return;}
+  var r=await fetch('/api/market/ratings',{method:'POST',headers:ah({'Content-Type':'application/json'}),body:JSON.stringify({deal_id:_ratingDealId,rated_id:_ratingRatedId,stars:stars,comment:comment})});
+  var d=await r.json();
+  if(d.success){setAlert('ratingAlert','Avaliacao enviada!','success');setTimeout(function(){closeModal('modalRating');},1500);}
+  else setAlert('ratingAlert',d.detail||d.error||'Erro.','error');
+}
+async function openProducerProfile(userId){
+  var r=await fetch('/api/market/profile/'+userId,{headers:ah()});if(!r.ok){showToast('Perfil nao encontrado.','error');return;}
+  var p=await r.json();
+  var stars=p.rating_avg?renderStars(p.rating_avg):'<span style="color:var(--text-muted)">Sem avaliacoes</span>';
+  var body='<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">'+
+    '<div style="width:52px;height:52px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700">'+(p.name||'?')[0].toUpperCase()+'</div>'+
+    '<div><div style="font-size:1.05rem;font-weight:700">'+esc(p.name)+'</div>'+
+    '<div style="font-size:.83rem;color:var(--text-muted)">'+esc(p.company_name||p.email||'')+'</div>'+
+    '<div style="margin-top:2px">'+stars+' <span style="font-size:.78rem;color:var(--text-muted)">('+( p.rating_count||0)+' avaliacao(es))</span></div></div></div>';
+  if(p.bio)body+='<p style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px">'+esc(p.bio)+'</p>';
+  if(p.city||p.whatsapp){
+    body+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">';
+    if(p.city)body+='<span class="tag">'+esc(p.city)+', '+esc(p.state||'')+'</span>';
+    if(p.whatsapp)body+='<a href="https://wa.me/55'+p.whatsapp.replace(/\D/g,'')+'" target="_blank" class="tag"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>';
+    body+='</div>';
+  }
+  if(p.active_listings&&p.active_listings.length){
+    body+='<div style="font-weight:600;font-size:.88rem;margin-bottom:8px">Anuncios ativos ('+p.active_listings.length+')</div><div style="display:flex;flex-direction:column;gap:8px">';
+    p.active_listings.slice(0,5).forEach(function(l){
+      body+='<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px;cursor:pointer" onclick="closeModal(\'modalProfilePublic\');openListing('+l.id+')"><b>'+esc(l.title)+'</b> <span style="font-size:.8rem;color:var(--text-muted)">'+esc(l.crop)+' - '+fmtQty(l.quantity_kg)+' - R$'+fmtPrice(l.price_per_kg)+'/kg</span></div>';
+    });
+    body+='</div>';
+  }
+  if(p.ratings&&p.ratings.length){
+    body+='<div style="font-weight:600;font-size:.88rem;margin-top:14px;margin-bottom:8px">Avaliacoes recentes</div>';
+    p.ratings.forEach(function(rv){
+      body+='<div style="border-left:3px solid var(--primary);padding:6px 10px;margin-bottom:6px;font-size:.83rem">'+
+        '<span style="color:#F59E0B">'+'&#9733;'.repeat(rv.stars)+'</span><b style="margin-left:6px">'+esc(rv.rater_name)+'</b>'+
+        '<span style="color:var(--text-muted);font-size:.76rem;margin-left:8px">'+fmtDate(rv.created_at)+'</span>'+
+        (rv.comment?'<div style="color:var(--text-muted);margin-top:2px">"'+esc(rv.comment)+'"</div>':'')+'</div>';
+    });
+  }
+  document.getElementById('profilePublicBody').innerHTML=body;openModal('modalProfilePublic');
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');if(id==='modalChat')clearInterval(chatTimer);}
+document.querySelectorAll('.overlay').forEach(function(el){el.addEventListener('click',function(e){if(e.target===el)closeModal(el.id);});});
+function showToast(msg,type){
+  type=type||'info';var ex=document.getElementById('_toast');if(ex)ex.remove();
+  var t=document.createElement('div');t.id='_toast';
+  var bg={success:'background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)',error:'background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-border)',info:'background:var(--info-bg);color:var(--info-text);border:1px solid var(--info-border)'};
+  t.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;'+(bg[type]||bg.info)+';padding:11px 18px;border-radius:var(--radius);font-size:.87rem;font-weight:500;box-shadow:0 4px 24px rgba(0,0,0,.22);max-width:320px;';
+  t.textContent=msg;document.body.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove();},3000);
+}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtPrice(v){return parseFloat(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtQty(v){var n=parseFloat(v||0);return n>=1000?(n/1000).toLocaleString('pt-BR',{maximumFractionDigits:1})+' t':n.toLocaleString('pt-BR')+' kg';}
+function fmtDate(iso,withTime){if(!iso)return'';var d=new Date(iso);if(isNaN(d))return'';return d.toLocaleDateString('pt-BR')+(withTime?' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'');}
+function statusLabel(s){return({disponivel:'Disponivel',vendido:'Vendido',negociando:'Negociando',fechado:'Negocio Fechado',em_transporte:'Em Transporte',entregue:'Entregue',concluido:'Concluido',recusado:'Recusado',cancelado:'Cancelado'})[s]||s;}
+function setAlert(id,msg,type){var el=document.getElementById(id);if(!msg){el.className='alert';el.innerHTML='';return;}el.className='alert alert-'+type+' show';el.innerHTML=msg;}
+init();
+</script>
+</body>
+</html>

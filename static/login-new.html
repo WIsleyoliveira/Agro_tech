@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroTech - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .info-panel {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-panel h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-panel p {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .features {
+            list-style: none;
+        }
+
+        .features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .features li:before {
+            content: '✓';
+            background: rgba(255,255,255,0.2);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .form-panel {
+            padding: 3rem;
+        }
+
+        .form-panel h2 {
+            margin-bottom: 0.5rem;
+            color: #111827;
+        }
+
+        .form-panel p {
+            color: #6B7280;
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #E5E7EB;
+        }
+
+        .tab {
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            color: #6B7280;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #10B981;
+            border-bottom-color: #10B981;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #10B981;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: #10B981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #059669;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .error {
+            background: #FEE2E2;
+            border: 1px solid #FECACA;
+            color: #991B1B;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .success {
+            background: #D1FAE5;
+            border: 1px solid #A7F3D0;
+            color: #065F46;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .info-panel {
+                display: none;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <h1>🌱 AgroTech Platform</h1>
+            <p>A plataforma que une educação de qualidade e desenvolvimento do agronegócio local.</p>
+            
+            <ul class="features">
+                <li>IA educacional para todas as matérias</li>
+                <li>Consultoria agrícola inteligente</li>
+                <li>Mercado local de produtos</li>
+                <li>Acesso gratuito para estudantes</li>
+                <li>Suporte ao pequeno produtor</li>
+            </ul>
+        </div>
+
+        <!-- Form Panel -->
+        <div class="form-panel">
+            <h2>Bem-vindo!</h2>
+            <p>Entre ou crie sua conta</p>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('login')">Login</button>
+                <button class="tab" onclick="showTab('registro')">Criar Conta</button>
+            </div>
+
+            <!-- Mensagens -->
+            <div id="errorMsg" class="error hidden"></div>
+            <div id="successMsg" class="success hidden"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="form-section active" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email ou Usuário</label>
+                    <input type="text" id="loginInput" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+
+                <button type="submit" class="btn" id="loginBtn">Entrar</button>
+            </form>
+
+            <!-- Registro Form -->
+            <form id="registroForm" class="form-section" onsubmit="handleRegistro(event)">
+                <div class="form-group">
+                    <label>Nome Completo</label>
+                    <input type="text" id="regNome" required>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Usuário</label>
+                        <input type="text" id="regUsername" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Senha (mínimo 6 caracteres)</label>
+                    <input type="password" id="regPassword" required minlength="6">
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Usuário</label>
+                    <select id="regTipo" onchange="toggleFields()" required>
+                        <option value="">Selecione...</option>
+                        <option value="ESTUDANTE">Estudante</option>
+                        <option value="AGRICULTOR">Agricultor</option>
+                    </select>
+                </div>
+
+                <!-- Campos para Estudante -->
+                <div id="estudanteFields" class="hidden">
+                    <div class="form-group">
+                        <label>Escola</label>
+                        <input type="text" id="regEscola">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Série/Ano</label>
+                            <input type="text" id="regSerie">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Idade</label>
+                            <input type="number" id="regIdade" min="5" max="100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campos para Agricultor -->
+                <div id="agricultorFields" class="hidden">
+                    <div class="form-group">
+                        <label>Nome da Propriedade</label>
+                        <input type="text" id="regPropriedade">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Localização</label>
+                            <input type="text" id="regLocalizacao">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Área (hectares)</label>
+                            <input type="number" id="regArea" step="0.1" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" id="regBtn">Criar Conta</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080';
+
+        function showTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.form-section').forEach(f => f.classList.remove('active'));
+            document.getElementById(tab + 'Form').classList.add('active');
+
+            // Clear messages
+            hideMessages();
+        }
+
+        function toggleFields() {
+            const tipo = document.getElementById('regTipo').value;
+            document.getElementById('estudanteFields').classList.toggle('hidden', tipo !== 'ESTUDANTE');
+            document.getElementById('agricultorFields').classList.toggle('hidden', tipo !== 'AGRICULTOR');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+            document.getElementById('successMsg').classList.add('hidden');
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMsg');
+            successDiv.textContent = message;
+            successDiv.classList.remove('hidden');
+            document.getElementById('errorMsg').classList.add('hidden');
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMsg').classList.add('hidden');
+            document.getElementById('successMsg').classList.add('hidden');
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            hideMessages();
+
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Entrando...';
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        login: document.getElementById('loginInput').value,
+                        senha: document.getElementById('loginPassword').value
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Credenciais inválidas');
+                }
+
+                const data = await response.json();
+                
+                // Salvar token e dados do usuário
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.usuario));
+
+                showSuccess('Login realizado! Redirecionando...');
+                
+                setTimeout(() => {
+                    const destino = data.usuario.tipo === 'AGRICULTOR' ? 'mercado.html' : 'platform.html';
+                    window.location.href = destino;
+                }, 1000);
+
+            } catch (error) {
+                showError(error.message || 'Erro ao fazer login');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Entrar';
+            }
+        }
+
+        async function handleRegistro(e) {
+            e.preventDefault();
+            hideMessages();
+
+            const regBtn = document.getElementById('regBtn');
+            regBtn.disabled = true;
+            regBtn.textContent = 'Criando...';
+
+            const tipo = document.getElementById('regTipo').value;
+
+            const requestData = {
+                username: document.getElementById('regUsername').value,
+                email: document.getElementById('regEmail').value,
+                senha: document.getElementById('regPassword').value,
+                nomeCompleto: document.getElementById('regNome').value,
+                tipo: tipo
+            };
+
+            // Adicionar campos específicos
+            if (tipo === 'ESTUDANTE') {
+                requestData.escola = document.getElementById('regEscola').value;
+                requestData.serie = document.getElementById('regSerie').value;
+                requestData.idade = parseInt(document.getElementById('regIdade').value) || null;
+            } else if (tipo === 'AGRICULTOR') {
+                requestData.propriedade = document.getElementById('regPropriedade').value;
+                requestData.localizacao = document.getElementById('regLocalizacao').value;
+                requestData.areaHectares = parseFloat(document.getElementById('regArea').value) || null;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/registrar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.text();
+                    throw new Error(error || 'Erro ao criar conta');
+                }
+
+                const data = await response.json();
+                
+                // Salvar token e dados
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.usuario));
+
+                showSuccess('Conta criada com sucesso! Redirecionando...');
+                
+                setTimeout(() => {
+                    const destino = data.usuario.tipo === 'AGRICULTOR' ? 'mercado.html' : 'platform.html';
+                    window.location.href = destino;
+                }, 1000);
+
+            } catch (error) {
+                showError(error.message || 'Erro ao criar conta');
+            } finally {
+                regBtn.disabled = false;
+                regBtn.textContent = 'Criar Conta';
+            }
+        }
+
+        // Verificar se já está logado
+        if (localStorage.getItem('token')) {
+            const savedUser = JSON.parse(localStorage.getItem('user') || '{}');
+            window.location.href = savedUser.tipo === 'AGRICULTOR' ? 'mercado.html' : 'platform.html';
+        }
+    </script>
+</body>
+</html>

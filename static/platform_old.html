@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroTech - Educação e Agronegócio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --secondary: #3B82F6;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --success: #10B981;
+            --bg: #F9FAFB;
+            --surface: #FFFFFF;
+            --text: #111827;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-name {
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        /* Layout */
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: calc(100vh - 65px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            padding: 0 0.75rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: var(--bg);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .welcome {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .welcome h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome p {
+            opacity: 0.9;
+        }
+
+        /* IA Cards Grid */
+        .ia-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .ia-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ia-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .ia-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .ia-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+        }
+
+        .ia-card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            display: none;
+            background: var(--surface);
+            border-radius: 12px;
+            height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 1rem;
+            border-radius: 12px;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+        }
+
+        .message.ia {
+            align-self: flex-start;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+
+        .chat-input-container {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .btn-send {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+
+        .loading span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading span:nth-child(1) { animation-delay: -0.32s; }
+        .loading span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Hide/Show sections */
+        .hidden {
+            display: none !important;
+        }
+
+        .show {
+            display: flex !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+
+            .ia-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-seedling"></i>
+            AgroTech Platform
+        </div>
+        <div class="user-info">
+            <span class="user-name" id="userName">Carregando...</span>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-title">Início</div>
+                    <a href="#" class="nav-item active" onclick="showHome()">
+                        <i class="fas fa-home"></i>
+                        <span>Página Inicial</span>
+                    </a>
+                </div>
+
+                <div class="nav-section" id="educacaoSection">
+                    <div class="nav-title">📚 Educação</div>
+                    <a href="#" class="nav-item" onclick="openIA('PORTUGUES')">
+                        <i class="fas fa-book"></i> Português
+                    </a>
+                    <a href="#" class="nav-item" onclick="openIA('MATEMATICA')">
+                        <i class="fas fa-calculator"></i> Matemática
+                    </a>
+                    <a href="#" class="nav-item" onclick="openIA('QUIMICA')">
+                        <i class="fas fa-flask"></i> Química
+                    </a>
+                    <a href="#" class="nav-item" onclick="openIA('FISICA')">
+                        <i class="fas fa-atom"></i> Física
+                    </a>
+                    <a href="#" class="nav-item" onclick="openIA('BIOLOGIA')">
+                        <i class="fas fa-dna"></i> Biologia
+                    </a>
+                    <a href="#" class="nav-item" onclick="openIA('GEOGRAFIA')">
+                        <i class="fas fa-globe"></i> Geografia
+                    </a>
+                    <a href="#" class="nav-item" onclick="openIA('HISTORIA')">
+                        <i class="fas fa-landmark"></i> História
+                    </a>
+                    <a href="#" class="nav-item" onclick="openIA('CIENCIAS')">
+                        <i class="fas fa-microscope"></i> Ciências
+                    </a>
+                </div>
+
+                <div class="nav-section" id="agroSection">
+                    <div class="nav-title">🌾 Agronegócio</div>
+                    <a href="#" class="nav-item" onclick="openIA('AGRO_IA')">
+                        <i class="fas fa-tractor"></i> Agro.IA
+                    </a>
+                    <a href="#" class="nav-item" onclick="showMercado()">
+                        <i class="fas fa-store"></i> Mercado Local
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <div id="homeSection">
+                <div class="welcome">
+                    <h1>Bem-vindo à AgroTech Platform! 🌱</h1>
+                    <p>Educação de qualidade e apoio ao agronegócio local, tudo em um só lugar.</p>
+                </div>
+
+                <div id="iaCardsContainer"></div>
+            </div>
+
+            <!-- Chat Section -->
+            <div id="chatSection" class="chat-container hidden">
+                <div class="chat-header">
+                    <div>
+                        <h2 id="chatTitle">Chat</h2>
+                        <p id="chatSubtitle"></p>
+                    </div>
+                    <button class="btn-logout" onclick="showHome()">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-container">
+                    <input 
+                        type="text" 
+                        class="chat-input" 
+                        id="messageInput" 
+                        placeholder="Digite sua mensagem..."
+                        onkeypress="if(event.key==='Enter') sendMessage()"
+                    >
+                    <button class="btn-send" id="sendBtn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i> Enviar
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        let currentUser = null;
+        let currentConversaId = null;
+        let currentTipoIA = null;
+
+        // Configuração das IAs
+        const iaConfig = {
+            PORTUGUES: { 
+                nome: 'Português', 
+                icon: '📖', 
+                color: '#EF4444',
+                descricao: 'Gramática, literatura e redação'
+            },
+            MATEMATICA: { 
+                nome: 'Matemática', 
+                icon: '🔢', 
+                color: '#3B82F6',
+                descricao: 'Álgebra, geometria e cálculo'
+            },
+            QUIMICA: { 
+                nome: 'Química', 
+                icon: '⚗️', 
+                color: '#8B5CF6',
+                descricao: 'Química orgânica e inorgânica'
+            },
+            FISICA: { 
+                nome: 'Física', 
+                icon: '⚛️', 
+                color: '#EC4899',
+                descricao: 'Mecânica, energia e movimento'
+            },
+            BIOLOGIA: { 
+                nome: 'Biologia', 
+                icon: '🧬', 
+                color: '#10B981',
+                descricao: 'Genética, ecologia e anatomia'
+            },
+            GEOGRAFIA: { 
+                nome: 'Geografia', 
+                icon: '🌍', 
+                color: '#14B8A6',
+                descricao: 'Geografia física e humana'
+            },
+            HISTORIA: { 
+                nome: 'História', 
+                icon: '🏛️', 
+                color: '#F59E0B',
+                descricao: 'História do Brasil e mundial'
+            },
+            CIENCIAS: { 
+                nome: 'Ciências', 
+                icon: '🔬', 
+                color: '#06B6D4',
+                descricao: 'Ciências naturais'
+            },
+            AGRO_IA: { 
+                nome: 'Agro.IA', 
+                icon: '🌾', 
+                color: '#84CC16',
+                descricao: 'Consultoria agrícola inteligente'
+            }
+        };
+
+        // Verificar autenticação
+        async function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const userData = JSON.parse(localStorage.getItem('user'));
+                currentUser = userData;
+                document.getElementById('userName').textContent = userData.nomeCompleto;
+                
+                renderIACards();
+                
+                // Mostrar/ocultar seções baseado no tipo de usuário
+                if (userData.tipo === 'ESTUDANTE') {
+                    document.getElementById('agroSection').style.display = 'none';
+                } else if (userData.tipo === 'AGRICULTOR') {
+                    document.getElementById('educacaoSection').style.display = 'none';
+                }
+            } catch (e) {
+                logout();
+            }
+        }
+
+        // Renderizar cards de IA
+        function renderIACards() {
+            const container = document.getElementById('iaCardsContainer');
+            let html = '<div class="ia-grid">';
+            
+            const ias = currentUser.tipo === 'ESTUDANTE' 
+                ? ['PORTUGUES', 'MATEMATICA', 'QUIMICA', 'FISICA', 'BIOLOGIA', 'GEOGRAFIA', 'HISTORIA', 'CIENCIAS']
+                : ['AGRO_IA'];
+
+            ias.forEach(tipo => {
+                const config = iaConfig[tipo];
+                html += `
+                    <div class="ia-card" onclick="openIA('${tipo}')">
+                        <div class="ia-icon" style="background: ${config.color}20; color: ${config.color}">
+                            ${config.icon}
+                        </div>
+                        <h3>${config.nome}</h3>
+                        <p>${config.descricao}</p>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Abrir chat com IA
+        async function openIA(tipoIA) {
+            currentTipoIA = tipoIA;
+            const config = iaConfig[tipoIA];
+            
+            document.getElementById('chatTitle').textContent = config.nome;
+            document.getElementById('chatSubtitle').textContent = config.descricao;
+            document.getElementById('chatMessages').innerHTML = '';
+            
+            document.getElementById('homeSection').classList.add('hidden');
+            document.getElementById('chatSection').classList.remove('hidden');
+            
+            // Criar nova conversa
+            await createConversa(tipoIA);
+            
+            // Mensagem de boas-vindas
+            addMessage('ia', `Olá! Sou seu professor de ${config.nome}. Como posso ajudar você hoje?`);
+        }
+
+        // Criar conversa
+        async function createConversa(tipoIA) {
+            try {
+                const response = await fetch(`${API_URL}/conversas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        tipoIA: tipoIA,
+                        titulo: `Conversa - ${iaConfig[tipoIA].nome}`
+                    })
+                });
+                
+                const conversa = await response.json();
+                currentConversaId = conversa.id;
+            } catch (error) {
+                console.error('Erro ao criar conversa:', error);
+            }
+        }
+
+        // Enviar mensagem
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message || !currentConversaId) return;
+            
+            // Adicionar mensagem do usuário
+            addMessage('user', message);
+            input.value = '';
+            
+            // Mostrar loading
+            const loadingId = addLoading();
+            document.getElementById('sendBtn').disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}/conversas/${currentConversaId}/mensagens`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ conteudo: message })
+                });
+                
+                const resposta = await response.json();
+                
+                // Remover loading e adicionar resposta
+                removeLoading(loadingId);
+                addMessage('ia', resposta.conteudo);
+                
+            } catch (error) {
+                removeLoading(loadingId);
+                addMessage('ia', 'Desculpe, ocorreu um erro. Tente novamente.');
+            } finally {
+                document.getElementById('sendBtn').disabled = false;
+            }
+        }
+
+        // Adicionar mensagem ao chat
+        function addMessage(type, content) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = content;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Adicionar loading
+        function addLoading() {
+            const messagesDiv = document.getElementById('chatMessages');
+            const loadingDiv = document.createElement('div');
+            const id = 'loading-' + Date.now();
+            loadingDiv.id = id;
+            loadingDiv.className = 'message ia loading';
+            loadingDiv.innerHTML = '<span></span><span></span><span></span>';
+            messagesDiv.appendChild(loadingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            return id;
+        }
+
+        // Remover loading
+        function removeLoading(id) {
+            const loading = document.getElementById(id);
+            if (loading) loading.remove();
+        }
+
+        // Voltar para home
+        function showHome() {
+            document.getElementById('chatSection').classList.add('hidden');
+            document.getElementById('homeSection').classList.remove('hidden');
+            currentConversaId = null;
+            currentTipoIA = null;
+        }
+
+        // Mostrar mercado (placeholder)
+        function showMercado() {
+            window.location.href = 'mercado.html';
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+
+        // Inicializar
+        checkAuth();
+    </script>
+</body>
+</html>
